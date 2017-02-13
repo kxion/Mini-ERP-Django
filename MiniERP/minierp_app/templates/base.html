@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{%load staticfiles%}
+<html lang="en">
+<head>
+	{% include "include.html" %}
+</head>
+
+
+<body>
+	<div id="id_wrapper">
+    	<!-- <div id="id_header"> -->
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div id="center_bar">
+					<div class="container" style="align-items: center;">
+						<div class="navbar-header">
+							<a class="navbar-brand" href="/"><img = src="{% static 'img/erp_logo.png' %}" height="23"></a>
+						</div>	
+						<!-- <form class="navbar-form navbar-left" role="search" method="GET" action="/search/">
+							<div class="form-group">
+								<div class="input-group">
+									<input type="text" name="title" class="form-control" placeholder="Find services">
+									<span class="input-group-btn">
+										<button class="btn btn-success">Find</button>
+									</span>
+								</div>
+							</div>
+						</form> -->
+						<ul class="nav navbar-nav navbar-right">
+							{% if user and not user.is_anonymous %}
+								<li class="dropdown">
+									<a href="# class=dropdown-toggle" data-toggle="dropdown" 
+										role="button" aria-haspopup="true" aria-expanded="fase" style="color:white">
+										{{ user.get_full_name|default:user.username }} <span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li><a href="{% url 'auth_password_change' %}?next={{'/'}}" style="color:red">Change Password</a></li>
+										<li><a href="{% url 'auth:logout' %}?next={{'/'}}">Logout</a></li>
+									</ul>
+								</li>
+							{% else %}
+								<li>
+									<a href="{% url 'auth_login' %}" style="color:white">Login</a>
+								</li>
+								<li>
+									<a href="{% url 'registration_register' %}" style="color:white">Sign up</a>
+								</li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</nav>
+			{% include "leftMenu.html" %}
+			{% block page %}
+			{% endblock %}
+		<!-- </div> -->
+		
+
+	
+		<!-- <footer id="id_footer">
+			<footer id="footer" class="navbar-inverse">
+				<div class="container">
+					<span style="color:#FFFF37">MiniERP App &copy; 2016</span>
+				</div>
+			</footer>
+		</footer>  -->
+		
+	</div>
+</body>
+
+</html>

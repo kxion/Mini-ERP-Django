@@ -1,0 +1,37 @@
+### reference: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx
+
+### login postgreSQL:
+$ sudo -u postgres psql
+password: mac12345
+
+### login with new user:
+$ psql postgres -U andrew (U must be uppercase)
+
+### check user list:
+postgres=# \du
+
+### create new user(role)
+postgres=# CREATE ROLE andrew WITH LOGIN PASSWORD 'mac12345';
+
+### add the CREATEDB permission to our new user
+postgres=# ALTER ROLE andrew CREATEDB; 
+
+### create a new table
+postgres=> CREATE DATABASE minierp_db;
+
+### add at least one user who has permission to access the database 
+postgres=> GRANT ALL PRIVILEGES ON DATABASE minierp_db TO andrew;
+
+### check all databases:
+postgres=> \list
+
+### connect to a specific database
+postgres=> \connect minierp_db
+
+### list the tables in the currently connected database
+postgres=> \dt
+
+### trouble shooting for kill the unknown process running on a specific port (8000)
+lsof -ti:8000 | xargs kill (change the port number as you need)
+
+

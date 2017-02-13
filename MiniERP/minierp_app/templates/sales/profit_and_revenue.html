@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+<!-- {% include "include.html" %} -->
+<!-- {% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="/static/plugins/datatables/extra/TableTools.css" media="screen"/>
+{% endblock %} -->
+{% block page %}
+
+   
+        <div id="mws-container" class="clearfix">
+            <br/>
+            <!-- Inner Container Start -->
+            <div class="container">
+                
+                    
+                <div class="mws-panel grid_8" style="margin-bottom:0px; background-color: #444444;">
+                    <div class="mws-panel-header">
+                        <span style="color:yellow; font-family:IcoMoon; font-size: 1.3em; text-align: center"><i class="icon-magic"></i>Sales Management</span>
+                    </div>
+                </div>
+
+                
+                
+                <div class="mws-panel grid_8" style="margin-bottom:0px ">
+                    <div class="mws-panel-body no-padding">
+                        
+                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="margin-right: 300px">
+                        
+                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Add </a>
+                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Modify </a>
+                        <a class="btn btn-danger" href="#" role="button" style="margin-right: 5px; min-width:90px">Delete </a>
+
+                        <div class="line"></div>
+
+
+                        <table class="mws-datatable-fn mws-table" name="users" id="users" style="text-align:center; font-size: 1em;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;padding:10px 10px 10px 10px;">Profit #</th>   
+                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Order #</th>                                
+                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Purchase #</th>
+                                    <th style="text-align:center;padding:8px 8px 8px 8px;">Amount</th>
+                                    <th style="text-align:center;padding:8px 8px 8px 8px;">Unit Price</th>
+                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Profit</th>
+                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Date</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for profit in profits %}
+                                <tr>
+                                    
+                                    <td> {{ profit.id }} </td>
+                                    <td> {% if profit.order_number %}{{ profit.order_number.id }}{% else %}none{% endif %} </td>
+                                    <td> {% if profit.purchase_number %}{{ profit.purchase_number.id }}{% else %}none{% endif %} </td>
+                                    <td> {{ profit.amount }} </td>
+                                    <td> {{ profit.unit_price }} </td>
+                                    <td> {{ profit.total }} </td>
+                                    <td> {{ profit.create_time }} </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+               
+                
+            
+                <!-- Panels End -->
+            </div>
+            <!-- Inner Container End -->
+                       
+            <!-- Footer -->
+            <div id="mws-footer">
+                Made by Chi An. All Rights Reserved.
+            </div>
+            
+        </div>
+        <!-- Main Container End -->
+    <script>
+        function myFunction() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("users");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }       
+          }
+        }
+    </script>
+    
+    
+{% endblock %}

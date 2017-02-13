@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+<!-- {% include "include.html" %} -->
+<!-- {% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="/static/plugins/datatables/extra/TableTools.css" media="screen"/>
+{% endblock %} -->
+{% block page %}
+
+   
+        <div id="mws-container" class="clearfix">
+            <br/>
+            <!-- Inner Container Start -->
+            <div class="container">
+                
+                    
+                <div class="mws-panel grid_8" style="margin-bottom:0px; background-color: #444444;">
+                    <div class="mws-panel-header">
+                        <span style="color:yellow; font-family:IcoMoon; font-size: 1.3em; text-align: center"><i class="icon-magic"></i>Stock Management</span>
+                    </div>
+                </div>
+
+                
+                
+                <div class="mws-panel grid_8" style="margin-bottom:0px ">
+                    <div class="mws-panel-body no-padding">
+                        
+                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="margin-right: 300px">
+                        
+                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Add </a>
+                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Modify </a>
+                        <a class="btn btn-danger" href="#" role="button" style="margin-right: 5px; min-width:90px">Delete </a>
+
+                        <div class="line"></div>
+
+
+                        <table class="mws-datatable-fn mws-table" name="users" id="users" style="text-align:center; font-size: 1em">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">ID</th>                              
+                                    <th style="text-align:center;">Product Name</th>
+                                    <th style="text-align:center;">Module</th>
+                                    <th style="text-align:center;">Purchase QTY</th>
+                                    <th style="text-align:center;">Sell QTY</th>
+                                    <th style="text-align:center;">Current QTY</th>
+                                    <th style="text-align:center;">Last Update</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stock in stocks %}
+                                <tr>
+                                    
+                                    <td> {{ stock.id }} </td>
+                                    <td> {{ stock.product.product_name }} </td>
+                                    <td> {{ stock.product.product_model }} </td>
+                                    <td> {{ stock.purchase }} </td>
+                                    <td> {{ stock.sell }} </td>
+                                    <td> {{ stock.current }} </td>
+                                    <td> {{ stock.updated }} </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+               
+                
+            
+                <!-- Panels End -->
+            </div>
+            <!-- Inner Container End -->
+                       
+            <!-- Footer -->
+            <div id="mws-footer">
+                Made by Chi An. All Rights Reserved.
+            </div>
+            
+        </div>
+        <!-- Main Container End -->
+    <script>
+        function myFunction() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("users");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }       
+          }
+        }
+    </script>
+    
+    
+{% endblock %}

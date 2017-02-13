@@ -1,0 +1,9 @@
+<div id="init-user-dialog" style="display:none">
+<form id="init-user-form" method="post" class="mws-form" action='{% url inituser %}'>
+    {% csrf_token %}
+    <div class="mws-form-message info" style="text-align:center;">
+        您确定要初始化这位用户的密码吗?
+    </div>
+        <input type="hidden" name='id' id='init_user_id'/>
+    </form>
+</div>

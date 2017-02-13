@@ -1,0 +1,47 @@
+<div id="edit-user-dialog" style="display:none" >
+<form id="edit-user-form" method="post" class="mws-form" action='{% url edituser %}'>
+    {% csrf_token %}
+    <input type="hidden" name='userid' id='edit_user_id' val=""/>
+       <div class="mws-form-inline">
+            <div class="mws-form-row">
+                <label class="mws-form-label">用户名:</label>
+                <div class="mws-form-item large">
+                    <input type="text" name='username' id='editusername' style="width:120px;"/>
+                        <div class="error-messages">
+                        </div>
+                </div>
+            </div>
+            <div class="mws-form-row">
+                <label class="mws-form-label">邮   箱:</label>
+                <div class="mws-form-item large">
+                    <input type="text" id='edituseremail' name='useremail' style="width:180px;"/>
+                        <div class="error-messages">
+                        </div>
+                </div>
+            </div>
+            <div class="mws-form-row">
+                <label class="mws-form-label">超级用户:</label>
+                <div class="mws-form-item large">
+                    <div id='editstudentsex'>
+                        <input type="radio" id='editstudentsex1' name='issuperuser' value='1'/><label
+                            for='editstudentsex0'>普通用户</label>
+                        <input type="radio" id='editstudentsex0' name='issuperuser' value='0'/><label
+                            for='editstudentsex1'>管理员</label>
+                    </div>
+                        <div class="error-messages">
+                        </div>
+                </div>
+            </div>
+
+            <div class="mws-form-row">
+                <label class="mws-form-label">备注信息：</label>
+                <div class="mws-form-item large">
+                    <input type="text" name='message' id='editmessage' style='width:180px; height:80px'>
+                    <div class="error-messages">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

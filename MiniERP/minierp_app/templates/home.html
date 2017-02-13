@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+
+<!-- Inner Container Start -->
+<div id="mws-container" class="clearfix">
+    <div class="mws-panel grid_8" style="background-color:#444444">
+        <div class="mws-panel-header">
+	        <span style="text-align: center; font-size: 15px; color:yellow"><i class="icon-magic"></i><b>Home Page</b></span>
+        </div> 
+    </div> 
+
+    <div class="mws-panel grid_8">
+        <div class="index-content mws-panel-body">
+            <img src="{% static 'img/ibm_banner.jpg' %}" class="banner">
+        </div>
+    </div>    
+</div>
+<!-- Main Container End -->
+
+{% endblock %}
