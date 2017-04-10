@@ -1,105 +1,117 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-
-
-<!-- {% include "include.html" %} -->
-<!-- {% block extrastyle %}
-    <link rel="stylesheet" type="text/css" href="/static/plugins/datatables/extra/TableTools.css" media="screen"/>
-{% endblock %} -->
 {% block page %}
 
-   
-        <div id="mws-container" class="clearfix">
-            <br/>
-            <!-- Inner Container Start -->
-            <div class="container">
+<div class="header">
+    <h1>Customer Management</h1>
+</div>  
+<div class="content">
+    {% if error %}
+    <div class="alert alert-danger" role="alert" id="message">
+        <strong >Warning!</strong> {{ error }}
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success" role="alert" id="message">
+        <strong>COOL!</strong> {{ success }}
+    </div>
+    {% endif %}
+    <table id="example" class="nowrap display nowrap cell-border hover compact" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Company Name</th>                                   
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+                <th>Contact</th>
+                <th>Phone</th>
+                <th>Fax</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td style="text-align:center;"> {{ customer.company_name }} </td>  
+                <td style="text-align:center;"> {{ customer.address }} </td>
+                <td style="text-align:center;"> {{ customer.city }} </td>
+                <td style="text-align:center;"> {{ customer.state.abbr }} </td>
+                <td style="text-align:center;"> {{ customer.zip_code }} </td>
+                <td style="text-align:center;"> {{ customer.contact_name }} </td>
+                <td style="text-align:center;"> {{ customer.phone }} </td>
                 
-                    
-                <div class="mws-panel grid_8" style="margin-bottom:0px; background-color: #444444;">
-                    <div class="mws-panel-header">
-                        <span style="color:yellow; font-family:IcoMoon; font-size: 1.3em; text-align: center"><i class="icon-magic"></i>Customer Management</span>
-                    </div>
+                {% if customer.fax %} 
+                    <td style="text-align:center;"> {{ customer.fax }} </td>
+                {% else %}
+                    <td style="text-align:center;">N/A</td>
+                {% endif %}
+                
+                {% if customer.note %} 
+                    <td style="text-align:center;"> {{ customer.note }} </td>
+                {% else %}
+                    <td style="text-align:center;">N/A</td>
+                {% endif %}
+                
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>    
+
+    
+    <form class="pure-form pure-form-stacked" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-4" style="margin-right: 15px">
+                    <label for="{{ form.company_name_for_label }}">Company Name</label>
+                    {{ form.company_name }}
                 </div>
 
-                
-                
-                <div class="mws-panel grid_8" style="margin-bottom:0px ">
-                    <div class="mws-panel-body no-padding">
-                        
-                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="margin-right: 300px">
-                        
-                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Add </a>
-                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Modify </a>
-                        <a class="btn btn-danger" href="#" role="button" style="margin-right: 5px; min-width:90px">Delete </a>
-
-                        <div class="line"></div>
-
-
-                        <table class="mws-datatable-fn mws-table" name="users" id="users" style="text-align:center; font-size: 1em">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center;">Company Name</th>                                   
-                                    <th style="text-align:center;">Address</th>
-                                    <th style="text-align:center;">City</th>
-                                    <th style="text-align:center;">State</th>
-                                    <th style="text-align:center;">Zip </th>
-                                    <th style="text-align:center;">Contact</th>
-                                    <th style="text-align:center;">Phone #</th>
-                                    <th style="text-align:center;">Fax #</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for customer in customers %}
-                                <tr>
-                                    
-                                    <td> {{ customer.company_name }} </td>
-                                    <td> {{ customer.address }} </td>
-                                    <td> {{ customer.city }} </td>
-                                    <td> {{ customer.state }} </td>
-                                    <td> {{ customer.zip_code }} </td>
-                                    <td> {{ customer.contact_name }} </td>
-                                    <td> {{ customer.phone }} </td>
-                                    <td> {{ customer.fax }} </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
-                    </div>
+                <div class="pure-u-1 pure-u-md-1-4" style="margin-right: 15px">
+                    <label for="{{ form.address_for_label }}">Address</label>
+                    {{ form.address }}
                 </div>
-               
-                
-            
-                <!-- Panels End -->
+
+                <div class="pure-u-1 pure-u-md-1-6" style="margin-right: 15px">
+                    <label for="{{ form.city_for_label }}">City</label>
+                    {{ form.city }}
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-8" style="margin-right: 15px">
+                    <label for="{{ form.zip_code_for_label }}">Zip Code</label>
+                    {{ form.zip_code }}
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-8" style="margin-right: 15px">
+                    <label for="{{ form.state_for_label }}">State</label>
+                    {{ form.state }}
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-5" style="margin-right: 15px">
+                    <label for="{{ form.contact_name_for_label }}">Contact Name</label>
+                    {{ form.contact_name }}
+                </div>
+                <div class="pure-u-1 pure-u-md-1-5" style="margin-right: 15px">
+                    <label for="{{ form.phone_for_label }}">Phone number</label>
+                    {{ form.phone }}
+                </div>
+                <div class="pure-u-1 pure-u-md-1-5" style="margin-right: 15px">
+                    <label for="{{ form.fax_for_label }}">Fax number</label>
+                    {{ form.fax }}
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-4" style="margin-right: 15px">
+                    <label for="{{ form.note_for_label }}">Note</label>
+                    {{ form.note }}
+                </div>
             </div>
-            <!-- Inner Container End -->
-                       
-            <!-- Footer -->
-            <div id="mws-footer">
-                Made by Chi An. All Rights Reserved.
-            </div>
-            
-        </div>
-        <!-- Main Container End -->
-    <script>
-        function myFunction() {
-          var input, filter, table, tr, td, i;
-          input = document.getElementById("myInput");
-          filter = input.value.toUpperCase();
-          table = document.getElementById("users");
-          tr = table.getElementsByTagName("tr");
-          for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-              } else {
-                tr[i].style.display = "none";
-              }
-            }       
-          }
-        }
-    </script>
-    
-    
+
+            <button type="submit" class="pure-button pure-button-primary">Add new customer</button>
+        </fieldset>
+    </form>
+</div>
+
 {% endblock %}
+
+

@@ -35,8 +35,8 @@ DEFAULT_FROM_EMAIL= 'MiniERP <ichiro710928@gmail.com>'
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "*****"
-EMAIL_HOST_PASSWORD = "*****"
+EMAIL_HOST_USER = "ichiro710928@gmail.com"
+EMAIL_HOST_PASSWORD = "*********"
 
 
 # Application definition
@@ -109,7 +109,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'minierp_db',                      # Or path to database file if using sqlite3.
         'USER': 'andrew',
-        'PASSWORD': '*****',
+        'PASSWORD': 'mac12345',
         'HOST': 'localhost',   # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',            # Set to empty string for default.
     }
@@ -164,8 +164,8 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = '/'
 
 # Facebook login
-SOCIAL_AUTH_FACEBOOK_KEY = '*****'
-SOCIAL_AUTH_FACEBOOK_SECRET = '*****'
+SOCIAL_AUTH_FACEBOOK_KEY = '**********'
+SOCIAL_AUTH_FACEBOOK_SECRET = '**************************'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email', 
@@ -185,8 +185,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 # Twilio SMS service
-TWILIO_ACCOUNT_SID = '*****'
-TWILIO_AUTH_TOKEN = '*****'
+TWILIO_ACCOUNT_SID = '******************************'
+TWILIO_AUTH_TOKEN = '******************************'
 
 import dj_database_url
 db_from_env = dj_database_url.config()

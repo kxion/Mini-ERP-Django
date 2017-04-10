@@ -5,7 +5,7 @@ from django.test import TestCase
 # from random import randint
 # from minierp_app.models import Customer, Supply, Product, Stock, Order, Purchase, Profit
 # fixture = AutoFixture(Customer)
-# fixture = AutoFixture(Supply, field_values={'phone': 6265867123, 'fax':7142657890, 'zip_code':92831})
+# fixture = AutoFixture(Supply, field_values={'phone': 7778889999, 'fax':7142657890, 'zip_code':12748})
 # entries = fixture.create(10)
 
 

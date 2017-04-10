@@ -1,176 +1,151 @@
-/* .代表class, #代表ID */
-/* .代表class, #代表ID */
-/* .代表class, #代表ID */
-/* .代表class, #代表ID */
-/* .代表class, #代表ID */
-/* .代表class, #代表ID */
 
-.container {
-    
-    /*width: 2100px;
-    width: 100%;
-    height: 50px;
-    background-color: rgba(0,0,0,0.8);
-    white-space: nowrap;
-    overflow: hidden;
-    overflow-x: scroll; 
-    -webkit-backface-visibility: hidden;
-    -webkit-perspective: 1000;
-    -webkit-overflow-scrolling: touch; 
-    text-align: justify; 
-    &::-webkit-scrollbar {
-        display: none;
-    }*/
-}
-
-html, body {
-    padding-top: 30px;
-    height: 100%;
-}
-
-/*doesn't work for admin page ?*/
-th.field-title {
-  width: 500px;
-}
-
-a {
-    color: #323232;
-}
-
-a:hover {
-    color: #0bb536;
-}
-
-#category a {
-    padding: 5px 15px;
-}
-
-#body {
-    background-color: #f7f7f7;
-}
-
-/*#body .banner {
-    width: 100%;
-    margin-bottom: 20px;
-}*/
 .banner {
-    width: 50%;
+    width: 55%;
     /*margin-bottom: 20px;*/
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-
-
-.green {
-    color: green;
+.content_center {
+    width: 40%; 
+    margin: auto; 
+    padding-bottom: 2%
 }
 
-
-/* From reference */
-#id_wrapper {
-    /* 設定高度最小為100%, 如果內容區塊很多, 可以長大 */
-    min-height: 97%;
-    /* 位置設為relative, 作為footer區塊位置的參考 */
-    position: relative;
-    background-color: #F8F8FF;
-
-    /*overflow: hidden;
-    overflow-x: scroll; 
-    -webkit-backface-visibility: hidden;*/
-    /*-webkit-perspective: 1000;*/
-    /*-webkit-overflow-scrolling: touch; 
-    text-align: justify; 
-    &::-webkit-scrollbar {
-        display: none;
-    }*/
-
-    /*background: url("/static/img/bg2.jpg") 50% no-repeat fixed;
-    background-size: 100%;*/
-}
-
-#id_header {
-    /* 設定header的高度 */
-    /*height: 20px;*/
-    /*box-sizing: border-box;*/
-}
-
-#id_content {
-    /* 留出header及footer區塊的空間 */
-    /*padding-top: 40px;*/
-    padding-bottom: 35px;
-}
-
-#footer {
-    padding: 15px 0;
-}
-
-#id_footer {
-    /* 設定footer的高度 */
-    height: 35px;
-    box-sizing: border-box;
-    /* 設定footer絕對位置在底部 */
-    position: absolute;
-    bottom: 0;
-    /* 展開footer寬度 */
-    width: 100%;
-}
-
-.line{
-   height:1px;
-   background-color: grey;
-}
-
-.navbar-default {
-    /*background-color: red;*/
-    border-color: #DDFF77;
-    border-bottom-width: 3px
-}
-
-.navbar-inverse {
-    border-color: green; 
-    border-width: 10px;
-}
-
-#bricks {
-    min-height: 60px;
-}
-
-#center_bar {
-    background-color: #444444; 
-    min-height: 60px; 
-    display: flex; 
-    align-items: center;
-}
-
-#myInput {
-    background-image: url("/static/img/search.png"); 
-    background-position: 10px 10px;
-    background-repeat: no-repeat;
-    /*text-align: center;*/
-    width: 40%;
+#logout_text {
+    color: white;
     font-size: 16px;
-    padding: 12px 20px 12px 40px;
-    border: 1px solid #ddd;
-    margin-left: 12px;
-    margin-bottom: 12px;
-    margin-top:12px;
 }
 
-#title_bar {
+#form_button {
+    height:40%;
+    margin-top: -10%;
+    margin-bottom: -10%;
+}
+
+#base_input {
+    margin-top: -10%;
+    margin-bottom: -10%;
+    margin-right: 5px;
+}
+
+#hello_message {
+    display:inline;
+    font-size: 16px;
+    color: yellow;
+}
+
+.alert {
+    text-align: center; 
+    width:105%; 
+    margin:auto; 
+    margin-bottom: 15px; 
+    line-height: 10px;
+}
+
+.abc {
+    background-color: red;
+}
+
+thead > tr > th { 
+    text-align:center;
+}
+
+
+table.dataTable thead th {
+    color:green;
+    /*border-top: lightgray 1px solid;*/
+}
+
+div.pure-u-1 select {
+    /*background-color: red;*/
+    height: 34px;
+}
+
+
+#example > tbody > tr > td {
+    text-align:center
+}
+
+.pure-form {
+    border: lightgray 1px solid; 
+    padding: 0px 0px 0px 20px; 
+    width:1000px; 
+    margin-top: 5px
+}
+
+.button-success {
+    width:180px;
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.half_container {
+    height:220px; 
+    width:1000px; 
+    /*border: lightgray 3px solid;*/
+    float:left;
+    overflow:hidden;
+}
+
+.text-box {
+    height:220px; 
+    width:200px; 
+    padding-top: 10px;
+    /*border: red 2px solid; */
+    float:left;
+}
+
+.text-box > ul > li {
+    text-shadow: 0.04em 0.04em 0.02em black;
+    color:gray;
+    /*font-weight: bold;*/
+    font-size: 15px;
+}
+
+.text-box > ul > p {
+    font-weight: bold;
+    /*margin-left: 20px;*/
+    color:hotpink;
+}
+
+.half_container > img {
+    margin-right:10px;
+    /*border: red 2px solid;*/
+}
+
+
+td > a > img.tableImg {
+    height: 34px; 
+    width: 40px;   
+}
+
+td.tableImg {
+    height: 34px;
+}
+
+td {
     text-align: center;
-    font-family:Times;
-    background-color: #444444;
-    color:yellow;
-    min-height: 40px;
-    border-radius:4px;
-    font-size: 3em;
 }
 
-#module_bar {
-    
-     
-    /*font-family:IcoMoon;
-    color: yellow;*/
+.redText {
+    color: red;
 }
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+

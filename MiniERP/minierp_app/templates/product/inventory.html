@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+<div class="header">
+    <h1>Inventory Management</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+    <table id="example" class="display nowrap compact" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Supplier</th>
+                <th>Product Name</th>                                   
+                <th>Model</th>
+                <th>Purchase</th>
+                <th>Sold</th>
+                <th>In Stock</th>
+                <!-- <th>Note</th> -->
+                <th>Last Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inventory in inventories %}
+            <tr>
+                <td> {{ inventory.id }} </td>
+                <td> {{ inventory.product.supplier }}</td>
+                <td><a href="#" onclick="show_product('{{ inventory.product.name }}', '{{ inventory.product.photo }}', '{{ inventory.product.supplier }}', '{{ inventory.product.model }}', '{{ inventory.product.price }}', '{{ inventory.product.stock }}', '{{ inventory.product.dimension }}', '{{ inventory.product.weight }}', '{{ inventory.product.note }}')"><b>{{ inventory.product.name }}</b></a></td>
+
+               <!--  <td style="text-align:center;"> {{ inventory.product.name }} </td> -->
+                
+                {% if inventory.product.model %} 
+                    <td style="text-align:center;"> {{ inventory.product.model }} </td>
+                {% else %}
+                    <td style="text-align:center;">N/A</td>
+                {% endif %}
+
+                <td style="text-align:center;"> {{ inventory.buy }} </td>
+                <td style="text-align:center;"> {{ inventory.sell }} </td>
+                <td style="text-align:center;"> {{ inventory.current }} </td>
+                <!-- <td style="text-align:center;"> {{ inventory.note }} </td> -->
+                <td style="text-align:center;"> {{ inventory.updated }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>    
+
+    <div id="product_detail" class="half_container" style="border: lightgray 1px solid;">
+        
+    </div>
+</div>
+{% endblock %}
+

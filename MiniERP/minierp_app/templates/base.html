@@ -1,70 +1,90 @@
 <!DOCTYPE html>
 {%load staticfiles%}
+
 <html lang="en">
 <head>
 	{% include "include.html" %}
 </head>
-
-
 <body>
-	<div id="id_wrapper">
-    	<!-- <div id="id_header"> -->
-			<nav class="navbar navbar-default navbar-fixed-top">
-				<div id="center_bar">
-					<div class="container" style="align-items: center;">
-						<div class="navbar-header">
-							<a class="navbar-brand" href="/"><img = src="{% static 'img/erp_logo.png' %}" height="23"></a>
-						</div>	
-						<!-- <form class="navbar-form navbar-left" role="search" method="GET" action="/search/">
-							<div class="form-group">
-								<div class="input-group">
-									<input type="text" name="title" class="form-control" placeholder="Find services">
-									<span class="input-group-btn">
-										<button class="btn btn-success">Find</button>
-									</span>
-								</div>
-							</div>
-						</form> -->
-						<ul class="nav navbar-nav navbar-right">
-							{% if user and not user.is_anonymous %}
-								<li class="dropdown">
-									<a href="# class=dropdown-toggle" data-toggle="dropdown" 
-										role="button" aria-haspopup="true" aria-expanded="fase" style="color:white">
-										{{ user.get_full_name|default:user.username }} <span class="caret"></span>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a href="{% url 'auth_password_change' %}?next={{'/'}}" style="color:red">Change Password</a></li>
-										<li><a href="{% url 'auth:logout' %}?next={{'/'}}">Logout</a></li>
-									</ul>
-								</li>
-							{% else %}
-								<li>
-									<a href="{% url 'auth_login' %}" style="color:white">Login</a>
-								</li>
-								<li>
-									<a href="{% url 'registration_register' %}" style="color:white">Sign up</a>
-								</li>
-							{% endif %}
-						</ul>
-					</div>
-				</div>
-			</nav>
-			{% include "leftMenu.html" %}
-			{% block page %}
-			{% endblock %}
-		<!-- </div> -->
-		
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="/">MiniERP</a>
+        
+        {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path %}
+        <form class="navbar-form navbar-right"  method="POST" action="{% url 'auth_login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" id="base_input" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="base_input" name="password" placeholder="Password">
+            </div>
+            <button class="btn btn-default" id="form_button">Login</button>
+        </form>
+        {% endif %}
+        
+        {% if request.user.is_authenticated %}
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <a href="{% url 'auth_logout' %}?next={{'/'}}" class="pure-menu-link" id="logout_text">Logout</a>
+            </li>
+        </ul>
 
-	
-		<!-- <footer id="id_footer">
-			<footer id="footer" class="navbar-inverse">
-				<div class="container">
-					<span style="color:#FFFF37">MiniERP App &copy; 2016</span>
-				</div>
-			</footer>
-		</footer>  -->
-		
-	</div>
+        <ul class="pure-menu-list">
+            
+            <li class="pure-menu-item" id="hello_message">
+                Hello,&nbsp 
+            </li>
+            
+            <li class="pure-menu-item"> 
+                <a href="#" class="pure-menu-link" id="logout_text">
+                {{ user.get_full_name|default:user.username }}</a>
+            </li>
+        </ul>
+        
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="splash-container">  
+    {% include "leftMenu.html" %}
+	{% block page %}
+	{% endblock %}
+</div>
+
+
 </body>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#example').DataTable( {
+
+        "scrollY": 215,
+        "scrollX": true,
+        "scrollCollapse": true,
+        "fixedColumns": {
+            leftColumns: 1,
+        },   
+    });
+} );
+
+</script>
+<style>
+    div.dataTables_wrapper {
+        padding-bottom: 5px;
+        font-size: 14px;
+        width: 1000px;
+        margin: 0 auto;
+        /*border-collapse: separate;*/
+        /*table-layout: fixed; */
+        /*border: lightgray 1px solid;*/
+        /*border-top: lightgray 1px solid;*/
+        /*border-bottom: lightgray 1px solid;*/
+        /*padding: 5px 10px 5px 10px; */
+    }
+</style>
 
 </html>
+
+
+

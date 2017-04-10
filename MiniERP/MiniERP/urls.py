@@ -31,7 +31,5 @@ urlpatterns = [
     url('^social/', include('social.apps.django_app.urls', namespace='social')),
     #url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url('^auth/', include('django.contrib.auth.urls', namespace='auth')),
-    # url(r'^register/$', register, name='register'),
-    # url(r'^register/success/$', register_success),
     url('', include('minierp_app.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

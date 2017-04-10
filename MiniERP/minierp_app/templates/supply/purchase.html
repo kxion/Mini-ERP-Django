@@ -1,107 +1,90 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-
-
-<!-- {% include "include.html" %} -->
-<!-- {% block extrastyle %}
-    <link rel="stylesheet" type="text/css" href="/static/plugins/datatables/extra/TableTools.css" media="screen"/>
-{% endblock %} -->
 {% block page %}
 
-   
-        <div id="mws-container" class="clearfix">
-            <br/>
-            <!-- Inner Container Start -->
-            <div class="container">
+<div class="header">
+<h1>Purchase Management</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+    {% if error %}
+    <div class="alert alert-danger" role="alert" id="message">
+        <strong >Warning!</strong> {{ error }}
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success" role="alert" id="message">
+        <strong>COOL!</strong> {{ success }}
+    </div>
+    {% endif %}
+    <table id="example" class="display nowrap compact" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Order #</th>   
+                <th>Supplier</th>
+                <th>Product Name</th>
+                <th>Product model</th>
+                <th>Amount</th>
+                <th>Unit Price</th>
+                <th>Total</th>       
+                <th>Date</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+            <tr>
+                <td style="text-align:center;"> {{ purchase.id }} </td>
+                <td style="text-align:center;"> {{ purchase.product.supplier }} </td>
+                <td style="text-align:center;"> {{ purchase.product.name }} </td>
                 
+
+                {% if purchase.product.model %} 
+                    <td style="text-align:center;"> {{ purchase.product.model }} </td>
+                {% else %}
+                    <td style="text-align:center;">N/A</td>
+                {% endif %}
+
+                <td style="text-align:center;"> {{ purchase.product_amount }} </td>
+                <td style="text-align:center;"> {{ purchase.product.price }} </td>
+                <td style="text-align:center;"> {{ purchase.total }} </td>
+                <td style="text-align:center;"> {{ purchase.create_time }} </td>
                     
-                <div class="mws-panel grid_8" style="margin-bottom:0px; background-color: #444444;">
-                    <div class="mws-panel-header">
-                        <span style="color:yellow; font-family:IcoMoon; font-size: 1.3em; text-align: center"><i class="icon-magic"></i>Sales Management</span>
-                    </div>
+                {% if purchase.note %} 
+                    <td style="text-align:center;"> {{ purchase.note }} </td>
+                {% else %}
+                    <td style="text-align:center;">N/A</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+    <form class="pure-form pure-form-stacked" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <div class="pure-g">     
+                <div class="pure-u-1 pure-u-md-1-4" style="margin-right: 16px; margin-left: 15px">
+                    <label for="{{ form.product_for_label }}">Product Name</label>
+                    {{ form.product }}
                 </div>
 
-                
-                
-                <div class="mws-panel grid_8" style="margin-bottom:0px ">
-                    <div class="mws-panel-body no-padding">
-                        
-                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name" style="margin-right: 300px">
-                        
-                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Add </a>
-                        <a class="btn btn-primary" href="#" role="button" style="margin-right: 5px; min-width:90px">Modify </a>
-                        <a class="btn btn-danger" href="#" role="button" style="margin-right: 5px; min-width:90px">Delete </a>
-
-                        <div class="line"></div>
-
-
-                        <table class="mws-datatable-fn mws-table" name="users" id="users" style="text-align:center; font-size: 1em;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center;padding:10px 10px 10px 10px;">Order #</th>   
-                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Product Name</th>
-                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Supplier</th>
-                                    <th style="text-align:center;padding:5px 5px 5px 5px;">Amount</th>
-                                    <th style="text-align:center;padding:5px 5px 5px 5px;">Unit Price</th>
-                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Note</th>
-                                    <th style="text-align:center;padding:0px 0px 0px 0px;">Date</th>
-                                    <th style="text-align:center;padding:8px 8px 8px 8px;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for purchase in purchases %}
-                                <tr>
-                                    
-                                    <td> {{ purchase.id }} </td>
-                                    <td> {{ purchase.product }} </td>
-                                    <td> {{ purchase.product.supplier }} </td>
-                                    <td> {{ purchase.product_amount }} </td>
-                                    <td> {{ purchase.purchase_price }} </td>
-                                    <td> {{ purchase.note }} </td>
-                                    <td> {{ purchase.create_time }} </td>
-                                    <td> {{ purchase.total }} </td>
-
-                                </tr>
-                            {% endfor %}
-
-                            </tbody>
-                        </table>
-
-                    </div>
+                <div class="pure-u-1 pure-u-md-1-6" style="margin-right: 16px">
+                    <label for="{{ form.product_amount_for_label }}">Amount</label>
+                    {{ form.product_amount }}
                 </div>
-               
-                
-            
-                <!-- Panels End -->
+
+                <div class="pure-u-1 pure-u-md-1-2" style="margin-right: 10px; margin-left: 15px">
+                    <label for="{{ form.note_for_label }}">Note</label>
+                    {{ form.note }} 
+                </div>
             </div>
-            <!-- Inner Container End -->
-                       
-            <!-- Footer -->
-            <div id="mws-footer">
-                Made by Chi An Chen.
-            </div>
-            
-        </div>
-        <!-- Main Container End -->
-    <script>
-        function myFunction() {
-          var input, filter, table, tr, td, i;
-          input = document.getElementById("myInput");
-          filter = input.value.toUpperCase();
-          table = document.getElementById("users");
-          tr = table.getElementsByTagName("tr");
-          for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
-            if (td) {
-              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-              } else {
-                tr[i].style.display = "none";
-              }
-            }       
-          }
-        }
-    </script>
-    
-    
+            <button type="submit" class="pure-button pure-button-primary" style="margin-left: 15px">Add new purchase</button>
+        </fieldset>
+    </form>
+
+</div>
+  
 {% endblock %}

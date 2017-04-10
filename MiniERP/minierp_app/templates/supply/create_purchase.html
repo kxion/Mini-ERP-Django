@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+<div class="header">
+    <h1>Create Purchase</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+    {% if error %}
+    <div class="alert alert-danger" role="alert" id="message">
+        <strong >Warning!</strong> {{ error }}
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success" role="alert" id="message">
+        <strong>COOL!</strong> {{ success }}
+    </div>
+    {% endif %}
+    <table id="example" class="display nowrap compact" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Update</th>
+                <th>ID</th>      
+                <th>Photo</th>    
+                <th>Product Name</th>  
+                <th>Supplier</th>
+                <th>Model</th>
+                <th>dimention(L"/W"/H")</th>
+                <th>weight(lb)</th>
+                <th>Unit Price</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td><a id="test" href="#" onclick="myfunction({{product.id}}, '{{product.photo}}')">Add</a></td>
+
+                <td> {{ product.id }} </td>
+
+                {% if product.photo %}                       
+                    <td><a href="{% url 'product_detail' product.id %}"><img src="/media/{{ product.photo }}" onerror="this.src='/static/img/no-image.png'" class="tableImg"></a></td>
+                {% else %}
+                    <td><a href="{% url 'product_detail' product.id %}"><img class="tableImg" src="/static/img/no-image.png"></a></td>
+                {% endif %}
+                
+                <td> {{ product.name }} </td>
+                <td> {{ product.supplier }} </td>
+                {% if product.model %} 
+                    <td> {{ product.model }} </td>
+                {% else %}
+                    <td>N/A</td>
+                {% endif %}
+
+                {% if product.dimention %} 
+                    <td> {{ product.dimention }} </td>
+                {% else %}
+                    <td>N/A</td>
+                {% endif %}
+                
+                <td> {{ product.weight }} </td>
+                <td> {{ product.price }} </td>
+                {% if product.note %} 
+                    <td> {{ product.note }} </td>
+                {% else %}
+                    <td>N/A</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>    
+
+    <div id="myhide" class="half_container" style="border: lightgray 1px solid;">
+        
+    </div>
+
+</div>
+{% endblock %}

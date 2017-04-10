@@ -1,59 +1,26 @@
-<div id="mws-sidebar-stitch"></div>
-<div id="mws-sidebar-bg"></div>
+<div id="menu">
+    <div class="pure-menu">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="{% url 'supply_management' %}" class="pure-menu-link">Supplier Management</a></li>
 
-<!-- Sidebar Wrapper -->
-<div id="mws-sidebar">
+            <li class="pure-menu-item"><a href="{% url 'create_purchase' %}" class="pure-menu-link">Create Purchase</a></li>
 
-    <!-- Hidden Nav Collapse Button -->
-    <!-- <div id="mws-nav-collapse">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div> -->
-    
-    <!-- Main Navigation -->
-    <div id="mws-navigation">
-        <ul>
-        	{% if user.is_superuser %}
-            <li><a href="#" id="module_bar" style="display: flex; align-items: center; font-family:IcoMoon; font-size: 1.1em; color:yellow"><i class="icol32-group-gear"></i>&nbspUser Module</a>
-                <ul>
-                    <li><a href="{% url 'user_management' 'super_user' %}">Super User list</a></li>
-                    <li><a href="{% url 'user_management' 'normal_user' %}">Normal User list</a></li>
-                </ul>
+            <li class="pure-menu-item"><a href="{% url 'purchase_management' %}" class="pure-menu-link">Purchase Management</a></li>
 
-            </li>
-            {% endif %}
+            <li class="pure-menu-item"><a href="{% url 'customer_management' %}" class="pure-menu-link">Customer Management</a></li>
 
-            <li><a href="#" id="module_bar" style="display: flex; align-items: center; font-family:IcoMoon; font-size: 1.1em; color:yellow"><i class="icol32-page-paste"></i>&nbspSupply Module</a>
-                <ul>
-                    <li><a href="{% url 'supply_management' %}">Supplier Management</a></li>
-                    <li><a href="{% url 'purchase_management' %}">Purchase Management</a></li>
-                </ul>
-            </li>
+            <li class="pure-menu-item"><a href="{% url 'order_management' %}" class="pure-menu-link">Order Management</a></li>
+            <li class="pure-menu-item"><a href="{% url 'product_management' %}" class="pure-menu-link">Product List</a></li>
+            <li class="pure-menu-item"><a href="{% url 'inventory_management' %}" class="pure-menu-link">inventory Management</a></li>
+            <li class="pure-menu-item"><a href="{% url 'profit_and_revenue' %}" class="pure-menu-link">Profit Management</a></li>
+            <!-- <li class="pure-menu-item"><a href="{% url 'profit_and_revenue' %}" class="pure-menu-link">Profit & Revenue</a></li> -->
 
-            <li><a href="#" id="module_bar" style="display: flex; align-items: center; font-family:IcoMoon; font-size: 1.1em; color:yellow"><i class="icol32-user-suit"></i>&nbspCustomer Module</a>
-                <ul>
-                    <li><a href="{% url 'customer_management' %}">Customer Management</a></li>
-                    <li><a href="{% url 'order_management' %}">Order Management</a></li>
-                </ul>
-            </li>
+            <!-- <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                <a href="#" class="pure-menu-link">Services</a>
+            </li> -->
 
-            <li><a href="#" style="display: flex; align-items: center; font-family:IcoMoon; font-size: 1.1em; color:yellow"><i class="icol32-calculator-black"></i>&nbspProduct Module</a>
-                <ul>
-                    <li><a href="{% url 'product_management' %}">Product List</a></li>
-                    <li><a href="{% url 'stock_management' %}">Stock Management</a></li>
-                </ul>
-            </li>
-
-            <li><a href="#" style="display: flex; align-items: center; font-family:IcoMoon; font-size: 1.1em; color:yellow"><i class="icol32-education"></i>&nbspSales Module</a>
-                <ul>
-                    <li><a href="{% url 'profit_and_revenue' %}">Sales Management</a></li>
-                    <li><a href="{% url 'profit_and_revenue' %}">Profit & Revenue</a></li>
-                </ul>
-            </li>
-            <li>
-            	<div id="bricks"></div>
-            </li>
+            
         </ul>
-    </div>         
+    </div>
 </div>

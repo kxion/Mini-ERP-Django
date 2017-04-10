@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block page %}
+
+<div class="header">
+    <h1>Welcome</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content" style="text-align: center">
+    <h2>Please enter your username and password</h2>
+    <form method="post">
+    	{% csrf_token %}
+    	{{ form.as_p }}
+    	<button type="submit" style="width: 30%">Submit</button>
+    </form>  
+
+</div>
+
+{% endblock %}
