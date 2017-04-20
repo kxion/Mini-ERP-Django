@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+<div class="header">
+    <h1>Product detail ( <b>{{product.name}}</b> ) -- <b id="stock_number">{{product.stock}} in stock</b> --</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+	{% if error %}
+    <div class="alert alert-danger" role="alert" id="message">
+        <strong >Warning!</strong> {{ error }}
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success" role="alert" id="message">
+        <strong>COOL!</strong> {{ success }}
+    </div>
+    {% endif %}
+    
+
+	<form class="pure-form pure-form-stacked" method="POST" enctype='multipart/form-data' style="width:600px;margin: 0 auto;">
+        {% csrf_token %}
+        <fieldset>
+                <p>
+                    {% if product.photo %}
+                    <div class="add_purchase_form">
+                        <img src="/media/{{ product.photo }}">
+                    </div>
+                    {% else %}
+                    <div style="text-align: center; max-height: 250px; margin-bottom: 20px">
+                        <img src="/static/img/no-image.png" style="height:250px;">
+                    </div>
+                    {% endif%}  
+                </p>
+                 
+
+                <div class="purchase_attr">
+                    Unit Price:
+                    {{ product.price }}
+                </div> 
+                <div class="purchase_attr">
+                    In Stock:
+                    {{ product.stock }}
+                </div>  
+                <div class="purchase_attr">
+                    Total Price:
+                    {{ product.stock }}
+                </div>  
+                <div class="purchase_attr">
+                    <!-- <label for="{{ form.photo_label }}">amount</label> -->
+                    Amount:{{ form.amount }}
+                </div>   
+                <div class="purchase_attr">
+                    <button type="submit" class="button-success pure-button" style="width:150px; text-align: center;">Add to list</button>
+                </div>  
+                
+
+                
+            
+            
+
+        </fieldset>
+    </form>
+</div>
+
+
+
+
+
+{% endblock %}

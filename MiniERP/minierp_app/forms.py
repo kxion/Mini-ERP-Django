@@ -1,25 +1,27 @@
 # gig form setting
 from django.forms import ModelForm
+from django import forms
+from django.core.validators import MinValueValidator, MaxValueValidator
 from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel
 
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ['company_name', 'contact_name', 'address', 'city', 'state', 'zip_code', 'phone', 'fax', 'note']
+        fields = ['company_name', 'contact_name', 'address', 'city', 'state', 'zip_code', 'phone', 'fax', 'email']
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
         self.fields['state'].widget.attrs['style'] = "width:122.25px"
-        self.fields['note'].widget.attrs['style'] = "width:132%"
+        self.fields['email'].widget.attrs['style'] = "width:132%"
 
 
 class SupplyForm(ModelForm):
     class Meta:
         model = Supply
-        fields = ['company_name', 'contact_name', 'address', 'city', 'state', 'zip_code', 'phone', 'fax', 'note']
+        fields = ['company_name', 'contact_name', 'address', 'city', 'state', 'zip_code', 'phone', 'fax', 'email']
     def __init__(self, *args, **kwargs):
         super(SupplyForm, self).__init__(*args, **kwargs)
         self.fields['state'].widget.attrs['style'] = "width:122.25px"
-        self.fields['note'].widget.attrs['style'] = "width:132%"
+        self.fields['email'].widget.attrs['style'] = "width:132%"
        
 
 class ProductForm(ModelForm):
@@ -60,18 +62,7 @@ class PurchaseForm(ModelForm):
         # self.fields['model'].widget.attrs['style'] = "width:200px"
         # self.fields['model'].queryset = ProductModel.objects.filter().exclude(product_model="None")
         
-# instance = getattr(self, 'instance', None)
-#         if instance and instance.pk:
-#         if instance.name is not None:
-#             self.fields['name'].widget.attrs['readonly'] = True
+class AmountForm(forms.Form):
+    amount = forms.IntegerField(validators=[MinValueValidator(1)])
 
-# class StockForm(ModelForm):
-#     class Meta:
-#         model = Stock
-#         fields = ['product', 'note', 'purchase', 'sell']
-
-# class ProfitForm(ModelForm):
-#     class Meta:
-#         model = Profit
-#         fields = ['order_number', 'purchase_number', 'note']
-
+    

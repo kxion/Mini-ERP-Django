@@ -12,6 +12,8 @@ class StateSelection(models.Model):
 	def __str__(self):
 		return self.abbr + " - " + self.state
 
+###############################################################
+
 class Customer(models.Model):
 	company_name = models.CharField(max_length=30)
 	contact_name = models.CharField(max_length=30)
@@ -21,12 +23,13 @@ class Customer(models.Model):
 	zip_code = models.CharField(max_length=5)
 	phone = models.CharField(max_length=12)
 	fax = models.CharField(max_length=12,  null=True, blank=True)
-	note = models.CharField(max_length=50, null=True, blank=True)
+	email = models.EmailField(max_length=60, null=True, blank=True)
 
 	def __str__(self):
 		return self.company_name
 
 ###############################################################
+
 class Supply(models.Model):
 	company_name = models.CharField(max_length=20)
 	contact_name = models.CharField(max_length=20)
@@ -36,7 +39,7 @@ class Supply(models.Model):
 	zip_code = models.CharField(max_length=5)
 	phone = models.CharField(max_length=12)
 	fax = models.CharField(max_length=12, null=True, blank=True)
-	note = models.CharField(max_length=50, null=True, blank=True)
+	email = models.EmailField(max_length=60, null=True, blank=True)
 
 	def __str__(self):
 		return self.company_name
@@ -50,6 +53,7 @@ class ProductModel(models.Model):
 		return self.product_model
 
 ###############################################################
+
 class Product(models.Model):
 	supplier = models.ForeignKey(Supply)
 	stock = models.IntegerField(default=0)
@@ -79,8 +83,8 @@ class Product(models.Model):
 		else:
 			return self.name + avaliable
 
-
 ##############################################################
+
 class Inventory(models.Model):
 	product = models.ForeignKey(Product)
 	note = models.CharField(max_length=50, null=True, blank=True)
@@ -99,6 +103,7 @@ class Inventory(models.Model):
 		return self.product.name
 
 ##############################################################
+
 class Order(models.Model):
 	customer = models.ForeignKey(Customer)
 	product = models.ForeignKey(Product)
@@ -117,6 +122,7 @@ class Order(models.Model):
 		return self.customer.company_name
 
 ###############################################################
+
 class Purchase(models.Model):
 	product = models.ForeignKey(Product)
 	product_amount = models.IntegerField(default=0)
@@ -132,6 +138,28 @@ class Purchase(models.Model):
 		return self.product.name
 
 ###############################################################
+
+
+class PendingPurchase(models.Model):
+	user = models.ForeignKey(User)
+	product = models.ForeignKey(Product)
+	product_amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+	is_pending = models.BooleanField(default=True) 
+
+	@property
+	def total(self):
+		return self.product_amount * self.product.price
+
+	def remain(self):
+		return self.product.stock - self.product_amount
+
+	def __str__(self):
+		return self.product.name
+
+###############################################################
+
 class Profit(models.Model):
 	order_number = models.ForeignKey(Order, blank=True, null=True)
 	purchase_number = models.ForeignKey(Purchase, blank=True, null=True)

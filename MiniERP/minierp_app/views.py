@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel, StateSelection
+from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel, StateSelection, PendingPurchase
 from .forms import *
 from twilio.rest import TwilioRestClient
 from MiniERP.sms import send_sms
@@ -60,6 +60,51 @@ def customer_management(request):
 
 	return render(request, 'customer/customer.html', {"customers": customers, "form": form})	
 
+
+
+###############################################################
+@login_required(login_url="/")
+def customer_detail(request, id):
+	error = ''
+	success = ''
+	customer = Customer.objects.get(id=id)
+	orders = Order.objects.filter(customer=customer)
+	form = CustomerForm(initial={
+								'company_name': customer.company_name,
+                                'contact_name': customer.contact_name,
+                                'address': customer.address,
+                                'city': customer.city,
+                                'state': customer.state,
+                                'zip_code': customer.zip_code,
+                                'fax': customer.fax,
+                                'email': customer.email,
+                                'phone': customer.phone })
+	
+	if request.method == 'POST':
+		customer_form = CustomerForm(request.POST, request.FILES)
+		if customer_form.is_valid():
+			customer.company_name = customer_form.cleaned_data['company_name']
+			customer.contact_name = customer_form.cleaned_data['contact_name']
+			customer.address = customer_form.cleaned_data['address']
+			customer.city = customer_form.cleaned_data['city']
+			customer.state = customer_form.cleaned_data['state']
+			customer.zip_code = customer_form.cleaned_data['zip_code']
+			customer.fax = customer_form.cleaned_data['fax']
+			customer.email = customer_form.cleaned_data['email']
+			customer.phone = customer_form.cleaned_data['phone']
+			customer.save()
+			success = " The customer - " + customer.company_name + " - has been updated successfully!"
+
+			customers = Customer.objects.all().order_by('company_name')
+			form = CustomerForm()
+			return render(request, 'customer/customer.html', {"customers": customers, "success": success, "form": form})
+		else:
+			error = "Data is not valid"
+			return render(request, 'customer/customer_detail.html', {"customer": customer, "error": error, "form": form, "orders": orders})
+
+	return render(request, 'customer/customer_detail.html', {"customer": customer,"form": form, "orders": orders})	
+
+
 ###############################################################
 @login_required(login_url="/")
 def supply_management(request):
@@ -84,6 +129,47 @@ def supply_management(request):
 
 
 
+###############################################################
+@login_required(login_url="/")
+def supply_detail(request, id):
+	error = ''
+	success = ''
+	supply = Supply.objects.get(id=id)
+	products = Product.objects.filter(supplier=supply)
+	form = SupplyForm(initial={
+								'company_name': supply.company_name,
+                                'contact_name': supply.contact_name,
+                                'address': supply.address,
+                                'city': supply.city,
+                                'state': supply.state,
+                                'zip_code': supply.zip_code,
+                                'fax': supply.fax,
+                                'email': supply.email,
+                                'phone': supply.phone })
+	
+	if request.method == 'POST':
+		supplier_form = SupplyForm(request.POST, request.FILES)
+		if supplier_form.is_valid():
+			supply.company_name = supplier_form.cleaned_data['company_name']
+			supply.contact_name = supplier_form.cleaned_data['contact_name']
+			supply.address = supplier_form.cleaned_data['address']
+			supply.city = supplier_form.cleaned_data['city']
+			supply.state = supplier_form.cleaned_data['state']
+			supply.zip_code = supplier_form.cleaned_data['zip_code']
+			supply.fax = supplier_form.cleaned_data['fax']
+			supply.email = supplier_form.cleaned_data['email']
+			supply.phone = supplier_form.cleaned_data['phone']
+			supply.save()
+			success = " The customer - " + supply.company_name + " - has been updated successfully!"
+
+			supplies = Supply.objects.all().order_by('company_name')
+			form = SupplyForm()
+			return render(request, 'supply/supply.html', {"supplies": supplies, "success": success, "form": form})
+		else:
+			error = "Data is not valid"
+			return render(request, 'supply/supply_detail.html', {"supply": supply, "error": error, "form": form, "products": products})
+
+	return render(request, 'supply/supply_detail.html', {"supply": supply, "form": form, "products": products})	
 
 
 
@@ -235,6 +321,49 @@ def purchase_management(request):
 	return render(request, 'supply/purchase.html', {"purchases": purchases, "form": form})
 
 
+
+
+@login_required(login_url="/")
+def add_purchase(request, id):
+	print()
+	error = ''
+	success = ''
+	product = Product.objects.get(id=id)
+	form = AmountForm(initial={'product_amount':1,})
+	
+	if request.method == 'POST':
+		amount_form = AmountForm(request.POST, request.FILES)
+		if amount_form.is_valid():
+			qty = amount_form.cleaned_data['amount']
+			if qty <= product.stock:
+				pending_item = PendingPurchase(product=product,user=request.user,product_amount=qty)
+				pending_item.save()
+				print("ok save")
+
+			# print(amount_form.cleaned_data['amount'])
+			# if product_form.cleaned_data['photo'] != None:
+			# 	product.photo = product_form.cleaned_data['photo']
+			# product.supplier = product_form.cleaned_data['supplier']
+			# product.model = product_form.cleaned_data['model']
+			# product.dimention = product_form.cleaned_data['dimention']
+			# product.weight = product_form.cleaned_data['weight']
+			# product.price = product_form.cleaned_data['price']
+			# product.note = product_form.cleaned_data['note']
+			# product.name = product_form.cleaned_data['name']
+			# product.save()
+			
+			success = " The product - " + product.name + " - has been updated successfully!"
+			# products = Product.objects.all().order_by('id')
+			products = Product.objects.all().order_by('supplier')
+			pendings = PendingPurchase.objects.filter(user=request.user)
+			return render(request, 'supply/create_purchase.html', {"products": products, "pendings": pendings})
+		else:
+			error = "Data is not valid"
+			return render(request, 'supply/add_purchase.html', {"product": product, "error": error, "form": form})
+	
+	return render(request, 'supply/add_purchase.html', {"product": product, "form": form})
+
+
 ###############################################################	
 @login_required(login_url="/")
 def create_purchase(request):
@@ -242,14 +371,15 @@ def create_purchase(request):
 	success = ''
 	form = ProductForm()
 	products = Product.objects.all().order_by('supplier')
-
-	if request.GET.get('id') != None:
-		product_id = int(request.GET.get('id'))
-		product = Product.objects.get(id=product_id)
-		print("ok")
-		return render(request, 'supply/create_purchase.html', {"products": products, "product": product})
+	pendings = PendingPurchase.objects.filter(user=request.user)
+	
+	# if request.GET.get('id') != None:
+	# 	product_id = int(request.GET.get('id'))
+	# 	product = Product.objects.get(id=product_id)
+	# 	print("ok")
+	# 	return render(request, 'supply/create_purchase.html', {"products": products, "product": product})
 	# products = Product.objects.all().order_by('id')
-	return render(request, 'supply/create_purchase.html', {"products": products})
+	return render(request, 'supply/create_purchase.html', {"products": products, "pendings": pendings})
 
 
 ###############################################################

@@ -1,7 +1,7 @@
 from django.forms import TextInput, Textarea
 from django.contrib import admin
 from django.db import models
-from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel, StateSelection
+from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel, StateSelection, PendingPurchase
 
 
 # Register your models here.
@@ -19,3 +19,4 @@ admin.site.register(Purchase)
 admin.site.register(ProductModel)
 admin.site.register(Profit, ProfitAdmin)
 admin.site.register(StateSelection)
+admin.site.register(PendingPurchase)
