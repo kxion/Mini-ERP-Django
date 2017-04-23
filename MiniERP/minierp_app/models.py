@@ -15,14 +15,14 @@ class StateSelection(models.Model):
 ###############################################################
 
 class Customer(models.Model):
-	company_name = models.CharField(max_length=30)
+	company_name = models.CharField(max_length=50)
 	contact_name = models.CharField(max_length=30)
-	address = models.CharField(max_length=25)
+	address = models.CharField(max_length=50)
 	city = models.CharField(max_length=15)
 	state = models.ForeignKey(StateSelection)
 	zip_code = models.CharField(max_length=5)
-	phone = models.CharField(max_length=12)
-	fax = models.CharField(max_length=12,  null=True, blank=True)
+	phone = models.CharField(max_length=15)
+	fax = models.CharField(max_length=15,  null=True, blank=True)
 	email = models.EmailField(max_length=60, null=True, blank=True)
 
 	def __str__(self):
@@ -31,26 +31,26 @@ class Customer(models.Model):
 ###############################################################
 
 class Supply(models.Model):
-	company_name = models.CharField(max_length=20)
-	contact_name = models.CharField(max_length=20)
-	address = models.CharField(max_length=25)
+	company_name = models.CharField(max_length=50)
+	contact_name = models.CharField(max_length=30)
+	address = models.CharField(max_length=50)
 	city = models.CharField(max_length=15)
 	state = models.ForeignKey(StateSelection)
 	zip_code = models.CharField(max_length=5)
-	phone = models.CharField(max_length=12)
-	fax = models.CharField(max_length=12, null=True, blank=True)
+	phone = models.CharField(max_length=15)
+	fax = models.CharField(max_length=15, null=True, blank=True)
 	email = models.EmailField(max_length=60, null=True, blank=True)
 
 	def __str__(self):
 		return self.company_name
 
 ###############################################################
-class ProductModel(models.Model):
-	product_name = models.CharField(max_length=25)
-	product_model = models.CharField(max_length=25)
+# class ProductModel(models.Model):
+# 	product_name = models.CharField(max_length=25)
+# 	product_model = models.CharField(max_length=25)
 
-	def __str__(self):
-		return self.product_model
+# 	def __str__(self):
+# 		return self.product_model
 
 ###############################################################
 
@@ -123,22 +123,20 @@ class Order(models.Model):
 
 ###############################################################
 
-class Purchase(models.Model):
-	product = models.ForeignKey(Product)
-	product_amount = models.IntegerField(default=0)
+class ImportOrder(models.Model):
+	supplier = models.ForeignKey(Supply) 
+	receiver = models.ForeignKey(User)
+	order_number = models.CharField(max_length=15)
+	total_price = models.DecimalField(max_digits=20, decimal_places=1)
 	create_time = models.DateTimeField(default=timezone.now)
 	updated = models.DateTimeField(auto_now=True)
 	note = models.CharField(max_length=50, null=True, blank=True)
-
-	@property
-	def total(self):
-		return self.product_amount * self.product.price
+	isReceive = models.BooleanField(default=False) 
 
 	def __str__(self):
-		return self.product.name
+		return self.supplier.company_name
 
 ###############################################################
-
 
 class PendingPurchase(models.Model):
 	user = models.ForeignKey(User)
@@ -152,41 +150,59 @@ class PendingPurchase(models.Model):
 	def total(self):
 		return self.product_amount * self.product.price
 
-	def remain(self):
-		return self.product.stock - self.product_amount
+	# def remain(self):
+	# 	return self.product.stock - self.product_amount
+
+	def __str__(self):
+		return self.product.name
+
+
+###############################################################
+
+class PurchaseItem(models.Model):
+	order_number = models.CharField(max_length=15)
+	user = models.ForeignKey(User)
+	product = models.ForeignKey(Product)
+	product_amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+
+	@property
+	def total(self):
+		return self.product_amount * self.product.price
 
 	def __str__(self):
 		return self.product.name
 
 ###############################################################
 
-class Profit(models.Model):
-	order_number = models.ForeignKey(Order, blank=True, null=True)
-	purchase_number = models.ForeignKey(Purchase, blank=True, null=True)
-	create_time = models.DateTimeField(default=timezone.now)
-	updated = models.DateTimeField(auto_now=True)
-	note = models.CharField(max_length=50, null=True, blank=True)
+# class Profit(models.Model):
+# 	order_number = models.ForeignKey(Order, blank=True, null=True)
+# 	purchase_number = models.ForeignKey(Purchase, blank=True, null=True)
+# 	create_time = models.DateTimeField(default=timezone.now)
+# 	updated = models.DateTimeField(auto_now=True)
+# 	note = models.CharField(max_length=50, null=True, blank=True)
 
-	@property
-	def amount(self):
-		if not self.order_number:
-			return self.purchase_number.product_amount 
-		else:
-			return self.order_number.product_amount 
+# 	@property
+# 	def amount(self):
+# 		if not self.order_number:
+# 			return self.purchase_number.product_amount 
+# 		else:
+# 			return self.order_number.product_amount 
 
-	@property
-	def unit_price(self):
-		if not self.order_number:
-			return self.purchase_number.purchase_price 
-		else:
-			return self.order_number.sell_price
+# 	@property
+# 	def unit_price(self):
+# 		if not self.order_number:
+# 			return self.purchase_number.purchase_price 
+# 		else:
+# 			return self.order_number.sell_price
 
-	@property
-	def total(self):
-		if not self.order_number:
-			return self.purchase_number.product_amount * self.purchase_number.purchase_price * -1
-		else:
-			return self.order_number.product_amount * self.order_number.sell_price
+# 	@property
+# 	def total(self):
+# 		if not self.order_number:
+# 			return self.purchase_number.product_amount * self.purchase_number.purchase_price * -1
+# 		else:
+# 			return self.order_number.product_amount * self.order_number.sell_price
 
-	def __int__(self):
-		return self.pk
+# 	def __int__(self):
+# 		return self.pk

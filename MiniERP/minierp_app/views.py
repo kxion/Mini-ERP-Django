@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel, StateSelection, PendingPurchase
+from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchase
 from .forms import *
 from twilio.rest import TwilioRestClient
 from MiniERP.sms import send_sms
@@ -237,9 +237,9 @@ def product_management(request):
 			inventory = Inventory(product=Product.objects.get(name=name, model=model))
 			inventory.save()
 
-			if not ProductModel.objects.filter(product_name=name):
-				product_model = ProductModel(product_name=name, product_model=model)
-				product_model.save()
+			# if not ProductModel.objects.filter(product_name=name):
+			# 	product_model = ProductModel(product_name=name, product_model=model)
+			# 	product_model.save()
 			success = "Adding new product completed"
 			products = Product.objects.all().order_by('id')
 			return render(request, 'product/product.html', {"products": products, "success": success, "form": form})
@@ -293,9 +293,9 @@ def order_management(request):
 ###############################################################	
 @login_required(login_url="/")
 def purchase_management(request):
-	form = PurchaseForm()
+	# form = PurchaseForm()
 	success = ''
-	purchases = Purchase.objects.all().order_by('id')
+	# purchases = Purchase.objects.all().order_by('id')
 
 	if request.method == 'POST':
 		purchase_form = PurchaseForm(request.POST, request.FILES)
@@ -312,13 +312,13 @@ def purchase_management(request):
 			print(inventory.buy)
 			success = "Adding new purchase completed"
 			purchases = Purchase.objects.all().order_by('id')
-			return render(request, 'supply/purchase.html', {"purchases": purchases, "success": success, "form": form})
+			return render(request, 'supply/purchase.html', { "success": success})
 		else:
 			print("fail!!!")
 			error = "Data is not valid"
-			return render(request, 'supply/purchase.html', {"purchases": purchases, "error": error, "form": form})
+			return render(request, 'supply/purchase.html', { "error": error})
 	
-	return render(request, 'supply/purchase.html', {"purchases": purchases, "form": form})
+	return render(request, 'supply/purchase.html', {})
 
 
 
@@ -335,10 +335,17 @@ def add_purchase(request, id):
 		amount_form = AmountForm(request.POST, request.FILES)
 		if amount_form.is_valid():
 			qty = amount_form.cleaned_data['amount']
-			if qty <= product.stock:
+			pending_items = PendingPurchase.objects.filter(product=product,user=request.user)
+			
+			if len(pending_items) == 0:
 				pending_item = PendingPurchase(product=product,user=request.user,product_amount=qty)
 				pending_item.save()
 				print("ok save")
+			else:
+				pending_item = PendingPurchase.objects.get(product=product,user=request.user)
+				pending_item.product_amount = pending_item.product_amount + qty
+				pending_item.save()
+				print("ok save 2")
 
 			# print(amount_form.cleaned_data['amount'])
 			# if product_form.cleaned_data['photo'] != None:
@@ -372,6 +379,12 @@ def create_purchase(request):
 	form = ProductForm()
 	products = Product.objects.all().order_by('supplier')
 	pendings = PendingPurchase.objects.filter(user=request.user)
+
+	if request.method == 'POST':
+		
+
+
+		print("post!!!!!!!")
 	
 	# if request.GET.get('id') != None:
 	# 	product_id = int(request.GET.get('id'))
@@ -403,11 +416,6 @@ def inventory_management(request):
 # 	product = Product.objects.get(id=id)
 # 	# products = Product.objects.all().order_by('id')
 # 	return render(request, 'product/inventory.html', {"inventories": inventories, "product": product})
-
-
-
-
-
 
 
 ###############################################################

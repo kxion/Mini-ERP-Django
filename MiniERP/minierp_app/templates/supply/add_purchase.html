@@ -3,7 +3,7 @@
 {% block page %}
 
 <div class="header">
-    <h1>Product detail ( <b>{{product.name}}</b> ) -- <b id="stock_number">{{product.stock}} in stock</b> --</h1>
+    <h1>Product detail ( <b>{{product.name}}</b> ) -- <b style="color:green">{{product.stock}} in stock</b> --</h1>
     <!-- <h2>A subtitle for your page goes here</h2> -->   
 </div>  
 <div class="content">
@@ -54,11 +54,6 @@
                 <div class="purchase_attr">
                     <button type="submit" class="button-success pure-button" style="width:150px; text-align: center;">Add to list</button>
                 </div>  
-                
-
-                
-            
-            
 
         </fieldset>
     </form>

@@ -20,7 +20,7 @@
     <table id="example" class="display nowrap compact" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Insert</th>
+                <th>Add to list</th>
                 <th>ID</th>      
                 <th>Photo</th>    
                 <th>Product Name</th>  
@@ -36,7 +36,7 @@
         <tbody>
             {% for product in products %}
             <tr>
-                <td ><a href="{% url 'add_purchase' product.id %}"><b>Edit >></b></a></td>
+                <td ><a href="{% url 'add_purchase' product.id %}"><b>Add >></b></a></td>
 
                 <td> {{ product.id }} </td>
 
@@ -76,32 +76,30 @@
 
     <table id="example3" class="display nowrap compact" cellspacing="0" width="100%">
         <thead>
-            <tr>
-                
+            <tr>        
+                <th><b>Edit</b></th>  
                 <th>Product Name</th>  
                 <th>Photo</th>    
                 <th>Supplier</th>
                 <th>Model</th>
                 <th>Unit Price</th>
-                <th>order QTY</th>
+                <th>QTY</th>
                 <th>Total Price</th>
-                <th>Remain QTY</th>
-                
+                <th><b">Delete from list</b></th>
             </tr>
         </thead>
         <tbody>
             {% for pending in pendings %}
             <tr>
                 
+                <td ><a href="{% url 'add_purchase' pending.product.id %}"><b>Edit >></b></a></td>
                 
                 <td style="text-align:center;"> {{ pending.product.name }} </td>
                 {% if pending.product.photo %}                       
                     <td style="text-align:center;"><img class="tableImg" src="/media/{{ pending.product.photo }}" onerror="this.src='/static/img/no-image.png'"></td>
                 {% else %}
                     <td style="text-align:center;"><img class="tableImg" src="/static/img/no-image.png"></td>
-                {% endif %}
-                
-                
+                {% endif %} 
                 <td style="text-align:center;"> {{ pending.product.supplier }} </td>
                 {% if pending.product.model %} 
                     <td style="text-align:center;"> {{ pending.product.model }} </td>
@@ -111,17 +109,19 @@
 
                 <td style="text-align:center;"> {{ pending.product.price }} </td>
                 <td style="text-align:center;"> {{ pending.product_amount }} </td>
-                
                 <td style="text-align:center;"> {{ pending.total }} </td>
-                
-                <td style="text-align:center;"> {{ pending.remain }} </td>
-                
+                <td ><a href="{% url 'add_purchase' pending.product.id %}" style="color:white"><button class="button-error pure-button">Remove</b></a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>  
     <div style="height:20px"></div>
-    <button type="submit" class="button-success pure-button" style="width:300px; text-align: center;">Create Purchase</button>
+
+    <form method="POST">
+    {% csrf_token %}
+        <button type="submit" class="button-success pure-button" style="width:300px; text-align: center;">Create Purchase</button>
+    </form>
+    
     <div style="height:20px"></div>
     
 </div>

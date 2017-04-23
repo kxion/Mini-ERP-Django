@@ -2,7 +2,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .models import Customer, Supply, Product, Inventory, Order, Purchase, Profit, ProductModel
+from .models import Customer, Supply, Product, Inventory, Order
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -47,20 +47,20 @@ class OrderForm(ModelForm):
         self.fields['customer'].queryset = Customer.objects.filter().order_by('company_name')
         self.fields['note'].widget.attrs['style'] = "width:128%"
 
-class PurchaseForm(ModelForm):
-    class Meta:
-        model = Purchase
-        fields = ['product', 'product_amount', 'note']
+# class PurchaseForm(ModelForm):
+#     class Meta:
+#         model = Purchase
+#         fields = ['product', 'product_amount', 'note']
         
-    def __init__(self, *args, **kwargs):
-        super(PurchaseForm, self).__init__(*args, **kwargs)
-        self.fields['product'].widget.attrs['style'] = "width:230px"
-        # self.fields['product'].widget.attrs['style'] = "color:red"
-        self.fields['product'].widget.attrs['id'] = "abc123"
-        self.fields['product'].queryset = Product.objects.filter().order_by('name')
-        self.fields['note'].widget.attrs['style'] = "width:97%"
-        # self.fields['model'].widget.attrs['style'] = "width:200px"
-        # self.fields['model'].queryset = ProductModel.objects.filter().exclude(product_model="None")
+#     def __init__(self, *args, **kwargs):
+#         super(PurchaseForm, self).__init__(*args, **kwargs)
+#         self.fields['product'].widget.attrs['style'] = "width:230px"
+#         # self.fields['product'].widget.attrs['style'] = "color:red"
+#         self.fields['product'].widget.attrs['id'] = "abc123"
+#         self.fields['product'].queryset = Product.objects.filter().order_by('name')
+#         self.fields['note'].widget.attrs['style'] = "width:97%"
+#         # self.fields['model'].widget.attrs['style'] = "width:200px"
+#         # self.fields['model'].queryset = ProductModel.objects.filter().exclude(product_model="None")
         
 class AmountForm(forms.Form):
     amount = forms.IntegerField(validators=[MinValueValidator(1)])
