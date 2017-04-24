@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchase
+from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchase, PurchaseItem
 from .forms import *
 from twilio.rest import TwilioRestClient
 from MiniERP.sms import send_sms
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
+import string
+import random
 
 
 # for registration
@@ -378,21 +380,42 @@ def create_purchase(request):
 	success = ''
 	form = ProductForm()
 	products = Product.objects.all().order_by('supplier')
-	pendings = PendingPurchase.objects.filter(user=request.user)
+	pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
 
 	if request.method == 'POST':
-		
+		order_number = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
+		purchase_items = PurchaseItem.objects.filter(order_number=order_number)
 
+		while len(purchase_items) != 0:
+			print(order_number + ' already exist!')
+			order_number = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
+			purchase_items = PurchaseItem.objects.filter(order_number=order_number)
 
-		print("post!!!!!!!")
+		for item in pending_items:
+			# item.is_pending = False
+			item.save()
+			purchase_item = PurchaseItem.objects.create(order_number=order_number,
+														user=request.user,
+														product= item.product,
+														product_amount=item.product_amount)
+			purchase_item.save()
+
+		purchase_orders = PurchaseItem.objects.all().distinct('order_number')
+		print("len = " + str(len(purchase_orders)))
+		pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
+		success = 'The Purchase has been created successfully with order# ' + order_number + '.'
+		return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items, "success": success})
 	
+
+
+
 	# if request.GET.get('id') != None:
 	# 	product_id = int(request.GET.get('id'))
 	# 	product = Product.objects.get(id=product_id)
 	# 	print("ok")
 	# 	return render(request, 'supply/create_purchase.html', {"products": products, "product": product})
 	# products = Product.objects.all().order_by('id')
-	return render(request, 'supply/create_purchase.html', {"products": products, "pendings": pendings})
+	return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items})
 
 
 ###############################################################

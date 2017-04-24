@@ -89,7 +89,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for pending in pendings %}
+            {% for pending in pending_items %}
             <tr>
                 
                 <td ><a href="{% url 'add_purchase' pending.product.id %}"><b>Edit >></b></a></td>

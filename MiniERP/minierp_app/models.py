@@ -176,6 +176,19 @@ class PurchaseItem(models.Model):
 
 ###############################################################
 
+class PurchaseOrder(models.Model):
+	order_number = models.CharField(max_length=15)
+	supplier = models.ForeignKey(Supply)
+	price = models.IntegerField(default=0)
+	amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.order_number
+
+###############################################################
+
 # class Profit(models.Model):
 # 	order_number = models.ForeignKey(Order, blank=True, null=True)
 # 	purchase_number = models.ForeignKey(Purchase, blank=True, null=True)
