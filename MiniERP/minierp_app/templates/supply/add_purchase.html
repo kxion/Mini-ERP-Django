@@ -19,41 +19,28 @@
     {% endif %}
     
 
-	<form class="pure-form pure-form-stacked" method="POST" enctype='multipart/form-data' style="width:600px;margin: 0 auto;">
+	<form class="pure-form pure-form-stacked" method="POST" enctype='multipart/form-data' style="width:450px;margin:auto; padding:0px">
         {% csrf_token %}
-        <fieldset>
+        <fieldset style="height:220px; margin:auto; padding-left: 10px">
+            <div class="add_product_box">    
+                {% if product.photo %}               
+                    <img src="/media/{{ product.photo }}">
+                {% else %}
+                    <img src="/static/img/no-image.png" style="height:250px;">
+                {% endif%} 
+            </div>    
+            <div class="add_product_box2" style="text-align: left">
+                <p style="margin-top: 10px"><b>Supplier:</b></p>
+                <p style="margin-left: 20px"><b style="color:#C71585">{{ product.supplier }}</b></p>
+                <p><b>Unit Price:</b></p>
+                <p style="margin-left: 20px"><b style="color:#C71585">{{ product.price }}</b></p>
+                <p style="width:150px"><b>Amount:</b>{{ form.amount }}</p>
                 <p>
-                    {% if product.photo %}
-                    <div class="add_purchase_form">
-                        <img src="/media/{{ product.photo }}">
-                    </div>
-                    {% else %}
-                    <div style="text-align: center; max-height: 250px; margin-bottom: 20px">
-                        <img src="/static/img/no-image.png" style="height:250px;">
-                    </div>
-                    {% endif%}  
-                </p>
-                 
-
-                <div class="purchase_attr">
-                    Unit Price:
-                    {{ product.price }}
-                </div> 
-                <div class="purchase_attr">
-                    In Stock:
-                    {{ product.stock }}
-                </div>  
-                <div class="purchase_attr">
-                    Total Price:
-                    {{ product.stock }}
-                </div>  
-                <div class="purchase_attr">
-                    <!-- <label for="{{ form.photo_label }}">amount</label> -->
-                    Amount:{{ form.amount }}
-                </div>   
-                <div class="purchase_attr">
                     <button type="submit" class="button-success pure-button" style="width:150px; text-align: center;">Add to list</button>
-                </div>  
+                </p>
+            </div>
+             
+            
 
         </fieldset>
     </form>

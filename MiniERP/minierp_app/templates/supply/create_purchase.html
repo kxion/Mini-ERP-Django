@@ -36,7 +36,8 @@
         <tbody>
             {% for product in products %}
             <tr>
-                <td ><a href="{% url 'add_purchase' product.id %}"><b>Add >></b></a></td>
+            
+                <td ><a href="{% url 'add_purchase' product.id %}"><button class="button-primary pure-button">Add</button></a></td>
 
                 <td> {{ product.id }} </td>
 
@@ -73,7 +74,9 @@
         </tbody>
     </table>    
 
-
+    <hr class="separator">      
+    <h3 class="middle_title">Pending Purchase List: </h3>
+    <hr class="separator"> 
     <table id="example3" class="display nowrap compact" cellspacing="0" width="100%">
         <thead>
             <tr>        
@@ -92,7 +95,7 @@
             {% for pending in pending_items %}
             <tr>
                 
-                <td ><a href="{% url 'add_purchase' pending.product.id %}"><b>Edit >></b></a></td>
+                <td ><a href="{% url 'add_purchase' pending.product.id %}"><button class="button-warning pure-button">Edit</button></a></td>
                 
                 <td style="text-align:center;"> {{ pending.product.name }} </td>
                 {% if pending.product.photo %}                       
@@ -110,16 +113,16 @@
                 <td style="text-align:center;"> {{ pending.product.price }} </td>
                 <td style="text-align:center;"> {{ pending.product_amount }} </td>
                 <td style="text-align:center;"> {{ pending.total }} </td>
-                <td ><a href="{% url 'add_purchase' pending.product.id %}" style="color:white"><button class="button-error pure-button">Remove</b></a></td>
+                <td ><a href="{% url 'delete_item' pending.id %}" style="color:white"><button class="button-error pure-button">Remove</a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>  
     <div style="height:20px"></div>
 
-    <form method="POST">
+    <form method="POST" style="text-align: center">
     {% csrf_token %}
-        <button type="submit" class="button-success pure-button" style="width:300px; text-align: center;">Create Purchase</button>
+        <button type="submit" class="button-success pure-button" style="width:1000px;height:40px;text-align:center;font-size: 20px"> -  Create Purchase  - </button>
     </form>
     
     <div style="height:20px"></div>

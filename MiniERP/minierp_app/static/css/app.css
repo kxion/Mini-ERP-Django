@@ -97,16 +97,6 @@ div.dataTables_wrapper {
 
 }
 
-.purchase_attr {
-
-    /*border: lightgray 1px solid;*/
-    float:left;
-    width:30%;
-    margin-right: 25px; 
-    margin-left: 50px;
-}
-
-
 thead > tr > th { 
     text-align:center;
 }
@@ -133,7 +123,15 @@ div.pure-u-1 select {
     width:1000px; 
     margin-top: 5px
 }
-
+/*
+td > a > button {
+    width:70%;
+    padding: 0px;
+    margin:0px;
+    text-align: center;
+    line-height:40px;
+}
+*/
 .button-success {
     width:180px;
     background: rgb(28, 184, 65); /* this is a green */
@@ -154,10 +152,129 @@ div.pure-u-1 select {
 .half_container {
     height:220px; 
     width:1000px; 
-    /*border: lightgray 3px solid;*/
+    border: lightgray 3px solid;
     float:left;
     overflow:hidden;
 }
+
+.top_container {
+    height:100%; 
+    width:600px; 
+    /*border: lightgray 1px solid;*/
+    /*background-color: #DCDCDC;*/
+    margin:auto;
+    overflow:hidden;
+}
+
+.buttom_container {
+    height:350px; 
+    width:600px; 
+    /*border: lightgray 1px solid;*/
+    margin:auto;
+    overflow:hidden;
+}
+
+.image_box > img {
+    height:70px;
+    padding:10px;
+    /*width:100px;*/
+}
+
+.image_box {
+    width:15%;
+    height:100px;
+    /*border:lightgray 1px solid;*/
+    text-align: center;
+    float:left;
+}
+
+.company_box {
+    padding-top: 2%;
+    width:27%;
+    height:100px;
+    font-size: 15px;
+    text-align: center;
+    float:left;
+}
+
+.company_box > p {
+    margin-bottom: 0px;
+}
+
+
+.green_text {
+    color:green;
+}
+
+.price_box > p {
+    margin-bottom: 0px;
+}
+
+.price_box {
+    padding-top: 2%;
+    width:15%;
+    height:100px;
+    font-size: 15px;
+    text-align: center;
+    float:left;
+}
+
+.left_box {
+    height:50%; 
+    width:50%; 
+    /*border: lightgray 1px solid;*/
+    /*background-color: #DCDCDC;*/
+    float:left;
+    margin-bottom: 10px;
+    text-align: right;
+    padding-right: 15px;
+}
+
+.right_box {
+    height:50%; 
+    width:50%; 
+    /*border: lightgray 1px solid;*/
+    /*background-color: #DCDCDC;*/
+    margin-bottom: 10px;
+    float:left;
+    text-align: left;
+
+}
+
+.right_box > h4 {
+    /*font-weight: normal;*/
+    color: #C71585;
+}
+
+.item_container {
+    width:600px; 
+    height:70px;   
+    /*border:lightgray 1px solid;*/
+    margin:auto;
+    border-bottom: lightgray 1px solid;
+    overflow:hidden;
+    /*background-color: #E0FFFF;*/
+    border-top: 0px;
+}
+
+.text-box2 {
+    height:220px; 
+    width:700px; 
+    padding-top: 10px;
+    border: red 2px solid; 
+    margin: 0 auto;   
+}
+
+.text-box3 {
+    height:220px; 
+    width:200px; 
+    padding-top: 10px;
+    border: red 2px solid; 
+    width: 50%;
+    margin: 0 auto;   
+    float:left;
+}
+
 
 .text-box {
     height:220px; 
@@ -201,6 +318,39 @@ td.tableImg {
 
 td {
     text-align: center;
+}
+
+.add_product_box {
+    height:220px; 
+    width:60%; 
+    /*border: red 2px solid; */
+    float:left;
+}
+
+.add_product_box2 {
+    height:220px; 
+    width:40%; 
+    padding-left: 10px;
+    /*border: red 2px solid; */
+    float:left;
+}
+
+.add_product_box > img {
+    margin-top: 5px;
+    vertical-align: middle;
+    height: 200px;
+    width:100%;
+    /*border: blue 2px solid;*/
+}
+
+
+.add_product_box2 > p {
+    margin:0px;
+    color:#C71585;
+}
+
+.add_product_box2 > p > b {
+    color:#696969;
 }
 
 .redText {

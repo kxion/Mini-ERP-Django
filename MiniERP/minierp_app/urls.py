@@ -16,7 +16,9 @@ urlpatterns = [
     url(r'^inventory_management/$', views.inventory_management, name='inventory_management'),
     url(r'^order_management/$', views.order_management, name='order_management'),
     url(r'^purchase_management/$', views.purchase_management, name='purchase_management'),
+    url(r'^purchase_order_details/(?P<id>[A-Z0-9]+)/$', views.purchase_order_details, name='purchase_order_details'),
     url(r'^add_purchase/(?P<id>[0-9]+)/$', views.add_purchase, name='add_purchase'),
+    url(r'^delete_item/(?P<id>[0-9]+)/$', views.delete_item, name='delete_item'),
     url(r'^create_purchase/$', views.create_purchase, name='create_purchase'),
     url(r'^profit_and_revenue/$', views.profit_and_revenue, name='profit_and_revenue'),
 ]

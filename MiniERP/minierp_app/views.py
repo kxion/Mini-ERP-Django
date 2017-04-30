@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchase, PurchaseItem
+from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchase, PurchaseItem, PurchaseOrder
 from .forms import *
 from twilio.rest import TwilioRestClient
 from MiniERP.sms import send_sms
@@ -296,33 +296,46 @@ def order_management(request):
 @login_required(login_url="/")
 def purchase_management(request):
 	# form = PurchaseForm()
-	success = ''
-	# purchases = Purchase.objects.all().order_by('id')
+	# success = ''
+	purchaseOrders = PurchaseOrder.objects.all().order_by('create_time')
 
-	if request.method == 'POST':
-		purchase_form = PurchaseForm(request.POST, request.FILES)
-		if purchase_form.is_valid():
-			product = purchase_form.cleaned_data['product']
-			amount = purchase_form.cleaned_data['product_amount']
-			purchase = purchase_form.save(commit=False)
-			purchase.save()
-			inventory = Inventory.objects.get(product=product)
-			inventory.buy = inventory.buy + amount
-			inventory.save()
-			product.stock = product.stock + amount
-			product.save()
-			print(inventory.buy)
-			success = "Adding new purchase completed"
-			purchases = Purchase.objects.all().order_by('id')
-			return render(request, 'supply/purchase.html', { "success": success})
-		else:
-			print("fail!!!")
-			error = "Data is not valid"
-			return render(request, 'supply/purchase.html', { "error": error})
+	# if request.method == 'POST':
+	# 	purchase_form = PurchaseForm(request.POST, request.FILES)
+	# 	if purchase_form.is_valid():
+	# 		product = purchase_form.cleaned_data['product']
+	# 		amount = purchase_form.cleaned_data['product_amount']
+	# 		purchase = purchase_form.save(commit=False)
+	# 		purchase.save()
+	# 		inventory = Inventory.objects.get(product=product)
+	# 		inventory.buy = inventory.buy + amount
+	# 		inventory.save()
+	# 		product.stock = product.stock + amount
+	# 		product.save()
+	# 		print(inventory.buy)
+	# 		success = "Adding new purchase completed"
+	# 		purchases = Purchase.objects.all().order_by('id')
+	# 		return render(request, 'supply/purchase.html', { "success": success})
+	# 	else:
+	# 		print("fail!!!")
+	# 		error = "Data is not valid"
+	# 		return render(request, 'supply/purchase.html', { "error": error})
 	
-	return render(request, 'supply/purchase.html', {})
+	return render(request, 'supply/purchase.html', {'purchaseOrders': purchaseOrders})
 
 
+###############################################################
+@login_required(login_url="/")
+def purchase_order_details(request, id):
+	items = PurchaseItem.objects.filter(order_number=id)
+	order = PurchaseOrder.objects.get(order_number=id)
+	total_price = 0
+	for item in items:
+		total_price += (item.product.price * item.product_amount)
+	print("total price = " + str(total_price))
+	return render(request, 'supply/purchase_order_details.html', {'items': items, 'total_price': total_price, 'order':order})
+
+
+###############################################################
 
 
 @login_required(login_url="/")
@@ -337,35 +350,26 @@ def add_purchase(request, id):
 		amount_form = AmountForm(request.POST, request.FILES)
 		if amount_form.is_valid():
 			qty = amount_form.cleaned_data['amount']
-			pending_items = PendingPurchase.objects.filter(product=product,user=request.user)
+			pending_items = PendingPurchase.objects.filter(product=product,user=request.user,is_pending=True)
 			
 			if len(pending_items) == 0:
 				pending_item = PendingPurchase(product=product,user=request.user,product_amount=qty)
 				pending_item.save()
 				print("ok save")
 			else:
-				pending_item = PendingPurchase.objects.get(product=product,user=request.user)
-				pending_item.product_amount = pending_item.product_amount + qty
+				pending_item = PendingPurchase.objects.get(product=product,user=request.user,is_pending=True)
+				pending_item.product_amount = qty
 				pending_item.save()
 				print("ok save 2")
-
-			# print(amount_form.cleaned_data['amount'])
-			# if product_form.cleaned_data['photo'] != None:
-			# 	product.photo = product_form.cleaned_data['photo']
-			# product.supplier = product_form.cleaned_data['supplier']
-			# product.model = product_form.cleaned_data['model']
-			# product.dimention = product_form.cleaned_data['dimention']
-			# product.weight = product_form.cleaned_data['weight']
-			# product.price = product_form.cleaned_data['price']
-			# product.note = product_form.cleaned_data['note']
-			# product.name = product_form.cleaned_data['name']
-			# product.save()
 			
-			success = " The product - " + product.name + " - has been updated successfully!"
+			success = " The product '" + product.name + "' has been add to pending purchse with QTY " + str(qty)
+			url = '/create_purchase/?message=' + success
 			# products = Product.objects.all().order_by('id')
 			products = Product.objects.all().order_by('supplier')
-			pendings = PendingPurchase.objects.filter(user=request.user)
-			return render(request, 'supply/create_purchase.html', {"products": products, "pendings": pendings})
+			pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
+			return redirect(url)
+
+			# return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items})
 		else:
 			error = "Data is not valid"
 			return render(request, 'supply/add_purchase.html', {"product": product, "error": error, "form": form})
@@ -376,13 +380,17 @@ def add_purchase(request, id):
 ###############################################################	
 @login_required(login_url="/")
 def create_purchase(request):
+	if request.GET.get('message') != None:
+		print("get value: " + request.GET.get('message'))
 	error = ''
-	success = ''
-	form = ProductForm()
+	success = request.GET.get('message', '')
+	print("message = " + success)
+
+	# form = ProductForm()
 	products = Product.objects.all().order_by('supplier')
 	pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
 
-	if request.method == 'POST':
+	if request.method == 'POST' and len(pending_items) != 0:
 		order_number = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
 		purchase_items = PurchaseItem.objects.filter(order_number=order_number)
 
@@ -391,31 +399,32 @@ def create_purchase(request):
 			order_number = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
 			purchase_items = PurchaseItem.objects.filter(order_number=order_number)
 
+		total_price = 0
+		total_amount = 0
+
 		for item in pending_items:
 			# item.is_pending = False
-			item.save()
+			# item.save()
+			total_price = total_price + item.total
+			total_amount = total_amount + item.product_amount
 			purchase_item = PurchaseItem.objects.create(order_number=order_number,
 														user=request.user,
 														product= item.product,
 														product_amount=item.product_amount)
 			purchase_item.save()
+			item.delete()
+		# purchase_order = PurchaseOrder.objects.create()	
 
-		purchase_orders = PurchaseItem.objects.all().distinct('order_number')
-		print("len = " + str(len(purchase_orders)))
-		pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
+		purchase_orders = PurchaseOrder.objects.create(order_number=order_number,
+													   price=total_price,
+													   amount=total_amount)
+		purchase_orders.save()
+		# print("len = " + str(len(purchase_orders)))
+		# pending_items = PendingPurchase.objects.filter(user=request.user, is_pending=True)
 		success = 'The Purchase has been created successfully with order# ' + order_number + '.'
-		return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items, "success": success})
-	
+		return render(request, 'supply/create_purchase.html', {"products": products, "success": success})
 
-
-
-	# if request.GET.get('id') != None:
-	# 	product_id = int(request.GET.get('id'))
-	# 	product = Product.objects.get(id=product_id)
-	# 	print("ok")
-	# 	return render(request, 'supply/create_purchase.html', {"products": products, "product": product})
-	# products = Product.objects.all().order_by('id')
-	return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items})
+	return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items, "success": success})
 
 
 ###############################################################
@@ -431,15 +440,16 @@ def inventory_management(request):
 	return render(request, 'product/inventory.html', {"inventories": inventories})
 
 
+################################################################
 
-# ###############################################################
-# @login_required(login_url="/")
-# def inventory_management(request, id):
-# 	inventories = Inventory.objects.all().order_by('product')
-# 	product = Product.objects.get(id=id)
-# 	# products = Product.objects.all().order_by('id')
-# 	return render(request, 'product/inventory.html', {"inventories": inventories, "product": product})
-
+@login_required(login_url="/")
+def delete_item(request, id):
+	print(id)
+	pending_item = PendingPurchase.objects.get(id=id)
+	pending_item.is_pending = False
+	pending_item.delete()	
+	url = '/create_purchase/'
+	return redirect(url)
 
 ###############################################################
 @login_required(login_url="/")

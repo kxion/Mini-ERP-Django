@@ -60,8 +60,9 @@ class Product(models.Model):
 	name = models.CharField(max_length=25)
 	model = models.CharField(max_length=20, default="", null=True, blank=True)
 	dimention = models.CharField(max_length=20, default="", null=True, blank=True)
-	weight = models.DecimalField(max_digits=20, decimal_places=1, null=True, blank=True)
-	price = models.IntegerField(default=0)
+	weight = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+	price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+	# price = models.IntegerField(default=0)
 	photo = models.FileField(upload_to='products', blank=True)
 	note = models.CharField(max_length=50, null=True, blank=True)
 	create_time = models.DateTimeField(default=timezone.now)
@@ -178,7 +179,7 @@ class PurchaseItem(models.Model):
 
 class PurchaseOrder(models.Model):
 	order_number = models.CharField(max_length=15)
-	supplier = models.ForeignKey(Supply)
+	# supplier = models.ForeignKey(Supply)
 	price = models.IntegerField(default=0)
 	amount = models.IntegerField(default=0)
 	create_time = models.DateTimeField(default=timezone.now)

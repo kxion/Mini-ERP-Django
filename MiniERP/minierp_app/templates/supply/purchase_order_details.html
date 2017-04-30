@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+<div class="header">
+<h1>Purchase Order Details</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+    <div class="top_container" style="text-align: center">
+        <div class="left_box">
+            <h4>Order Number :</h4>
+            <h4>Order Creation Date :</h4>
+            <h4>Total Product Amount : </h4>
+            <h4>Order Total Price :</h4>
+            
+        </div>
+        <div class="right_box">
+            <h4>{{ order.order_number }}</h4>
+            <h4>{{ order.create_time }}</h4>
+            <h4>{{ order.amount }}</h4>
+            <h4>{{ order.price }} USD</h4>
+            
+
+        </div>    
+        <!-- <b style="font-size: 20px;margin-right: 5px">Order Number: </b>
+        <b style="font-size: 18px; color:green; margin-right: 3em">{{ order.order_number}} </b><br>
+        <b style="font-size: 20px;">Total Product Amount: </b>
+        <b style="font-size: 18px; color:green;">{{ order.amount}}</b><br>
+        <b style="font-size: 20px;">Total Price: </b>
+        <b style="font-size: 18px; color:green;">{{ order.price}} USD</b><br>
+        <b style="font-size: 20px;">Order Date: </b>
+        <b style="font-size: 18px; color:green;">{{ order.create_time }} </b><br> -->
+        
+        <hr class="separator">      
+        <h3 class="middle_title">Items details in this order :</h3>
+        <hr class="separator"> 
+    </div>
+    <div class="buttom_container">
+        {% for item in items %}
+        <div class="item_container">
+            <div class="image_box">
+                <img src="/media/{{ item.product.photo }}">
+            </div>
+            <div class="company_box">
+                <p style="margin-bottom: 0px"><b>- Supplier -</b></p>
+                <p class="green_text">{{item.product.supplier}}</p>
+            </div>
+            <div class="company_box">
+                <p><b>- Product Name -</b></p>
+                <p class="green_text">{{item.product.name}}</p>
+            </div>
+            <div class="price_box">
+                <p><b>- QTY -</b></p>
+                <p class="green_text">{{item.product_amount}}</p>
+                
+            </div>
+            <div class="price_box">
+                <p><b>- Price -</b></p>  
+                <p class="green_text">{{item.total}}</p>
+                
+            </div>
+            
+
+            <!-- {{item.create_time}} -->
+            
+            
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+
+
+</div>
+  
+{% endblock %}
