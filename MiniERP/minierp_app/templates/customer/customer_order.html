@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page %}
+
+<div class="header">
+<h1>Customer Orders</h1>
+    <!-- <h2>A subtitle for your page goes here</h2> -->   
+</div>  
+<div class="content">
+    <table id="example4" class="display nowrap compact" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Order Details</th>
+                <th>Order #</th>
+                <th>Customer</th>   
+                <th>Total QTY</th>
+                <th>Total Price</th>
+                <th>Order date</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in customerOrders %}
+            <tr>
+                <td style="text-align:center;"><a href="{% url 'customer_order_details' order.order_number %}">Click for Details</a></td>
+                <td style="text-align:center;"> {{ order.order_number }} </td>
+                <td style="text-align:center;"> {{ order.customer }} </td>
+                <td style="text-align:center;"> {{ order.amount }} </td>
+                <td style="text-align:center;"> {{ order.price }} </td>
+                <td style="text-align:center;"> {{ order.create_time }} </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+  
+{% endblock %}

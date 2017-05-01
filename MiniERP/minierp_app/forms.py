@@ -1,5 +1,5 @@
 # gig form setting
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .models import Customer, Supply, Product, Inventory, Order
@@ -31,7 +31,6 @@ class ProductForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.fields['supplier'].widget.attrs['style'] = "width:195.59px"
-        # self.fields['photo'].widget.attrs['style'] = "height:34px"
         
 
 class OrderForm(ModelForm):
@@ -47,22 +46,12 @@ class OrderForm(ModelForm):
         self.fields['customer'].queryset = Customer.objects.filter().order_by('company_name')
         self.fields['note'].widget.attrs['style'] = "width:128%"
 
-# class PurchaseForm(ModelForm):
-#     class Meta:
-#         model = Purchase
-#         fields = ['product', 'product_amount', 'note']
-        
-#     def __init__(self, *args, **kwargs):
-#         super(PurchaseForm, self).__init__(*args, **kwargs)
-#         self.fields['product'].widget.attrs['style'] = "width:230px"
-#         # self.fields['product'].widget.attrs['style'] = "color:red"
-#         self.fields['product'].widget.attrs['id'] = "abc123"
-#         self.fields['product'].queryset = Product.objects.filter().order_by('name')
-#         self.fields['note'].widget.attrs['style'] = "width:97%"
-#         # self.fields['model'].widget.attrs['style'] = "width:200px"
-#         # self.fields['model'].queryset = ProductModel.objects.filter().exclude(product_model="None")
         
 class AmountForm(forms.Form):
     amount = forms.IntegerField(validators=[MinValueValidator(1)])
 
-    
+class CustomerSelectForm(forms.Form):
+    customer = ModelChoiceField(queryset=Customer.objects.all())
+    def __init__(self, *args, **kwargs):
+        super(CustomerSelectForm, self).__init__(*args, **kwargs)
+        self.fields['customer'].widget.attrs['style'] = "width:230px"

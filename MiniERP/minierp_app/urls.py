@@ -17,8 +17,12 @@ urlpatterns = [
     url(r'^order_management/$', views.order_management, name='order_management'),
     url(r'^purchase_management/$', views.purchase_management, name='purchase_management'),
     url(r'^purchase_order_details/(?P<id>[A-Z0-9]+)/$', views.purchase_order_details, name='purchase_order_details'),
+    url(r'^customer_order_details/(?P<id>[A-Z0-9]+)/$', views.customer_order_details, name='customer_order_details'),
     url(r'^add_purchase/(?P<id>[0-9]+)/$', views.add_purchase, name='add_purchase'),
-    url(r'^delete_item/(?P<id>[0-9]+)/$', views.delete_item, name='delete_item'),
+    url(r'^add_order_item/(?P<id>[0-9]+)/$', views.add_order_item, name='add_order_item'),
+    url(r'^delete_purchase_item/(?P<id>[0-9]+)/$', views.delete_purchase_item, name='delete_purchase_item'),
+    url(r'^delete_order_item/(?P<id>[0-9]+)/$', views.delete_order_item, name='delete_order_item'),
     url(r'^create_purchase/$', views.create_purchase, name='create_purchase'),
+    url(r'^create_order/$', views.create_order, name='create_order'),
     url(r'^profit_and_revenue/$', views.profit_and_revenue, name='profit_and_revenue'),
 ]

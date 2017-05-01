@@ -26,5 +26,11 @@ $(document).ready(function() {
             leftColumns: 1,
         },   
     });
+
+    $('#example4').DataTable( {
+        "scrollY": 310,
+        "scrollX": true,
+        "scrollCollapse": true,
+    });
 });
 

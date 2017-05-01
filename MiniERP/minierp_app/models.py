@@ -12,6 +12,7 @@ class StateSelection(models.Model):
 	def __str__(self):
 		return self.abbr + " - " + self.state
 
+
 ###############################################################
 
 class Customer(models.Model):
@@ -44,13 +45,6 @@ class Supply(models.Model):
 	def __str__(self):
 		return self.company_name
 
-###############################################################
-# class ProductModel(models.Model):
-# 	product_name = models.CharField(max_length=25)
-# 	product_model = models.CharField(max_length=25)
-
-# 	def __str__(self):
-# 		return self.product_model
 
 ###############################################################
 
@@ -62,7 +56,6 @@ class Product(models.Model):
 	dimention = models.CharField(max_length=20, default="", null=True, blank=True)
 	weight = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
 	price = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-	# price = models.IntegerField(default=0)
 	photo = models.FileField(upload_to='products', blank=True)
 	note = models.CharField(max_length=50, null=True, blank=True)
 	create_time = models.DateTimeField(default=timezone.now)
@@ -83,6 +76,54 @@ class Product(models.Model):
 			return self.name + " --- " + self.model + avaliable
 		else:
 			return self.name + avaliable
+
+
+###############################################################
+
+class PendingOrderItem(models.Model):
+	user = models.ForeignKey(User)
+	product = models.ForeignKey(Product)
+	product_amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+
+	@property
+	def total(self):
+		return self.product_amount * self.product.price
+
+	def __str__(self):
+		return self.product.name
+
+###############################################################
+
+class CustomerOrder(models.Model):
+	customer = models.ForeignKey(Customer)
+	order_number = models.CharField(max_length=15)
+	price = models.IntegerField(default=0)
+	amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.order_number
+
+###############################################################
+
+class OrderItem(models.Model):
+	order_number = models.CharField(max_length=15)
+	product = models.ForeignKey(Product)
+	product_amount = models.IntegerField(default=0)
+	create_time = models.DateTimeField(default=timezone.now)
+	updated = models.DateTimeField(auto_now=True)
+
+	@property
+	def total(self):
+		return self.product_amount * self.product.price
+
+	def __str__(self):
+		return self.product.name
+
+
 
 ##############################################################
 
@@ -124,35 +165,31 @@ class Order(models.Model):
 
 ###############################################################
 
-class ImportOrder(models.Model):
-	supplier = models.ForeignKey(Supply) 
-	receiver = models.ForeignKey(User)
-	order_number = models.CharField(max_length=15)
-	total_price = models.DecimalField(max_digits=20, decimal_places=1)
-	create_time = models.DateTimeField(default=timezone.now)
-	updated = models.DateTimeField(auto_now=True)
-	note = models.CharField(max_length=50, null=True, blank=True)
-	isReceive = models.BooleanField(default=False) 
+# class ImportOrder(models.Model):
+# 	supplier = models.ForeignKey(Supply) 
+# 	receiver = models.ForeignKey(User)
+# 	order_number = models.CharField(max_length=15)
+# 	total_price = models.DecimalField(max_digits=20, decimal_places=1)
+# 	create_time = models.DateTimeField(default=timezone.now)
+# 	updated = models.DateTimeField(auto_now=True)
+# 	note = models.CharField(max_length=50, null=True, blank=True)
+# 	isReceive = models.BooleanField(default=False) 
 
-	def __str__(self):
-		return self.supplier.company_name
+# 	def __str__(self):
+# 		return self.supplier.company_name
 
 ###############################################################
 
-class PendingPurchase(models.Model):
+class PendingPurchaseItem(models.Model):
 	user = models.ForeignKey(User)
 	product = models.ForeignKey(Product)
 	product_amount = models.IntegerField(default=0)
 	create_time = models.DateTimeField(default=timezone.now)
 	updated = models.DateTimeField(auto_now=True)
-	is_pending = models.BooleanField(default=True) 
 
 	@property
 	def total(self):
 		return self.product_amount * self.product.price
-
-	# def remain(self):
-	# 	return self.product.stock - self.product_amount
 
 	def __str__(self):
 		return self.product.name
