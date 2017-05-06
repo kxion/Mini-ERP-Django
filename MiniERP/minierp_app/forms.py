@@ -2,7 +2,7 @@
 from django.forms import ModelForm, ModelChoiceField
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .models import Customer, Supply, Product, Inventory, Order
+from .models import Customer, Supply, Product, Inventory
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -32,20 +32,6 @@ class ProductForm(ModelForm):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.fields['supplier'].widget.attrs['style'] = "width:195.59px"
         
-
-class OrderForm(ModelForm):
-    class Meta:
-        model = Order
-        fields = ['customer', 'product', 'product_amount', 'note']
-
-    def __init__(self, *args, **kwargs):
-        super(OrderForm, self).__init__(*args, **kwargs)
-        self.fields['product'].widget.attrs['style'] = "width:230px"
-        self.fields['product'].queryset = Product.objects.filter().order_by('name')
-        self.fields['customer'].widget.attrs['style'] = "width:200px"
-        self.fields['customer'].queryset = Customer.objects.filter().order_by('company_name')
-        self.fields['note'].widget.attrs['style'] = "width:128%"
-
         
 class AmountForm(forms.Form):
     amount = forms.IntegerField(validators=[MinValueValidator(1)])

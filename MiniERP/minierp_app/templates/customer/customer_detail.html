@@ -4,7 +4,6 @@
 
 <div class="header">
     <h1>Customer details ( <b class="title">{{ customer.company_name }}</b> )</h1>
-    <!-- <h2>A subtitle for your page goes here</h2> -->   
 </div> 
 
 <div class="content">
@@ -78,38 +77,27 @@
     <table id="example2" class="display nowrap compact" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Order</th>                                   
-                <th>Customer</th>
-                <th>Product Name</th>
-                <th>Model</th>
-                <th>Amount</th>
-                <th>Unit Price</th>
-                <th>Total</th>
-                <th>Date</th>
-                <th>Note</th>
+                <th>Order Details</th>
+                <th>Order #</th>
+                <th>Customer</th>   
+                <th>Total QTY</th>
+                <th>Total Price</th>
+                <th>Order date</th>
                 
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
             <tr>
-                <td style="text-align:center;"> {{ order.id }} </td>
+                <td style="text-align:center;"><a href="{% url 'customer_order_details' order.order_number %}">Click for Details</a></td>
+                <td style="text-align:center;"> {{ order.order_number }} </td>
                 <td style="text-align:center;"> {{ order.customer }} </td>
-                <td style="text-align:center;"> {{ order.product.name }} </td>
-                <td style="text-align:center;"> {{ order.product.model }} </td>
-                <td style="text-align:center;"> {{ order.product_amount }} </td>
-                <td style="text-align:center;"> {{ order.product.price }} </td>
-                <td style="text-align:center;"> {{ order.total }} </td>
-                
+                <td style="text-align:center;"> {{ order.amount }} </td>
+                <td style="text-align:center;"> {{ order.price }} </td>
                 <td style="text-align:center;"> {{ order.create_time }} </td>
-                {% if order.note %} 
-                    <td style="text-align:center;"> {{ order.note }} </td>
-                {% else %}
-                    <td style="text-align:center;">N/A</td>
-                {% endif %}
-                
             </tr>
-            {% endfor %}
+        {% endfor %}
+
         </tbody>
     </table>  
 </div>

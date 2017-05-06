@@ -144,39 +144,6 @@ class Inventory(models.Model):
 	def __str__(self):
 		return self.product.name
 
-##############################################################
-
-class Order(models.Model):
-	customer = models.ForeignKey(Customer)
-	product = models.ForeignKey(Product)
-	product_amount = models.IntegerField(default=0)
-	sell_price = models.IntegerField(default=0)
-	create_time = models.DateTimeField(default=timezone.now)
-	updated = models.DateTimeField(auto_now=True)
-	note = models.CharField(max_length=50, null=True, blank=True)
-	@property
-	def total(self):
-		return self.product_amount * self.product.price
-
-	# def __unicode__(self):
-	# 	return self.pk
-	def __str__(self):
-		return self.customer.company_name
-
-###############################################################
-
-# class ImportOrder(models.Model):
-# 	supplier = models.ForeignKey(Supply) 
-# 	receiver = models.ForeignKey(User)
-# 	order_number = models.CharField(max_length=15)
-# 	total_price = models.DecimalField(max_digits=20, decimal_places=1)
-# 	create_time = models.DateTimeField(default=timezone.now)
-# 	updated = models.DateTimeField(auto_now=True)
-# 	note = models.CharField(max_length=50, null=True, blank=True)
-# 	isReceive = models.BooleanField(default=False) 
-
-# 	def __str__(self):
-# 		return self.supplier.company_name
 
 ###############################################################
 
@@ -227,33 +194,3 @@ class PurchaseOrder(models.Model):
 
 ###############################################################
 
-# class Profit(models.Model):
-# 	order_number = models.ForeignKey(Order, blank=True, null=True)
-# 	purchase_number = models.ForeignKey(Purchase, blank=True, null=True)
-# 	create_time = models.DateTimeField(default=timezone.now)
-# 	updated = models.DateTimeField(auto_now=True)
-# 	note = models.CharField(max_length=50, null=True, blank=True)
-
-# 	@property
-# 	def amount(self):
-# 		if not self.order_number:
-# 			return self.purchase_number.product_amount 
-# 		else:
-# 			return self.order_number.product_amount 
-
-# 	@property
-# 	def unit_price(self):
-# 		if not self.order_number:
-# 			return self.purchase_number.purchase_price 
-# 		else:
-# 			return self.order_number.sell_price
-
-# 	@property
-# 	def total(self):
-# 		if not self.order_number:
-# 			return self.purchase_number.product_amount * self.purchase_number.purchase_price * -1
-# 		else:
-# 			return self.order_number.product_amount * self.order_number.sell_price
-
-# 	def __int__(self):
-# 		return self.pk

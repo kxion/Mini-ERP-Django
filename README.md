@@ -1,2 +1,2 @@
 # MiniERP
-A simple ERP system base on Python/Django
+A web base ERP system built from Python/Django

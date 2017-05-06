@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import Customer, Supply, Product, Inventory, Order, StateSelection, PendingPurchaseItem
+from .models import Customer, Supply, Product, Inventory, StateSelection, PendingPurchaseItem
 from .models import PurchaseItem, PurchaseOrder, CustomerOrder, OrderItem, PendingOrderItem
 from .forms import *
 from twilio.rest import TwilioRestClient
@@ -11,7 +11,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 import string
 import random
-
 
 # for registration
 from django.views.decorators.csrf import csrf_protect
@@ -71,7 +70,7 @@ def customer_detail(request, id):
 	error = ''
 	success = ''
 	customer = Customer.objects.get(id=id)
-	orders = Order.objects.filter(customer=customer)
+	orders = CustomerOrder.objects.filter(customer=customer)
 	form = CustomerForm(initial={
 								'company_name': customer.company_name,
                                 'contact_name': customer.contact_name,
@@ -236,9 +235,6 @@ def product_management(request):
 			inventory = Inventory(product=Product.objects.get(name=name, model=model))
 			inventory.save()
 
-			# if not ProductModel.objects.filter(product_name=name):
-			# 	product_model = ProductModel(product_name=name, product_model=model)
-			# 	product_model.save()
 			success = "Adding new product completed"
 			products = Product.objects.all().order_by('id')
 			return render(request, 'product/product.html', {"products": products, "success": success, "form": form})
@@ -310,12 +306,9 @@ def add_purchase(request, id):
 			
 			success = " The product '" + product.name + "' has been add to pending purchse with QTY " + str(qty)
 			url = '/create_purchase/?message=' + success
-			# products = Product.objects.all().order_by('id')
 			products = Product.objects.all().order_by('supplier')
 			pending_items = PendingPurchaseItem.objects.filter(user=request.user)
 			return redirect(url)
-
-			# return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items})
 		else:
 			error = "Data is not valid"
 			return render(request, 'supply/add_pending_item.html', {"product": product, "error": error, "form": form})
@@ -337,6 +330,12 @@ def add_order_item(request, id):
 		amount_form = AmountForm(request.POST, request.FILES)
 		if amount_form.is_valid():
 			qty = amount_form.cleaned_data['amount']
+			inventory_item = Inventory.objects.get(product=product)
+			if inventory_item.current < qty:
+				error = 'Insufficient stock: This product currently have ' + str(inventory_item.current) + ' in stock'
+				return render(request, 'supply/add_pending_item.html', {"product": product, "error": error, "form": form})
+
+
 			pending_items = PendingOrderItem.objects.filter(product=product,user=request.user)
 			
 			if len(pending_items) == 0:
@@ -351,12 +350,8 @@ def add_order_item(request, id):
 			
 			success = " The product '" + product.name + "' has been add to pending order with QTY " + str(qty)
 			url = '/create_order/?message=' + success
-			# products = Product.objects.all().order_by('id')
-			# products = Product.objects.all().order_by('supplier')
-			# pending_items = PendingOrderItem.objects.filter(user=request.user)
 			return redirect(url)
 
-			# return render(request, 'supply/create_purchase.html', {"products": products, "pending_items": pending_items})
 		else:
 			error = "Data is not valid"
 			return render(request, 'supply/add_pending_item.html', {"product": product, "error": error, "form": form})
@@ -397,6 +392,13 @@ def create_purchase(request):
 														product_amount=item.product_amount)
 			purchase_item.save()
 			item.delete()
+			inventory_item = Inventory.objects.get(product=purchase_item.product)
+			inventory_item.buy = inventory_item.buy + purchase_item.product_amount
+			inventory_item.save()
+			
+			product_item = Product.objects.get(pk=purchase_item.product.pk)
+			product_item.stock = product_item.stock + purchase_item.product_amount
+			product_item.save()
 		
 		purchase_orders = PurchaseOrder.objects.create(order_number=order_number,
 													   price=total_price,
@@ -445,6 +447,14 @@ def create_order(request):
 														product_amount=item.product_amount)
 			order_item.save()
 			item.delete()
+
+			inventory_item = Inventory.objects.get(product=item.product)
+			inventory_item.sell = inventory_item.sell + item.product_amount
+			inventory_item.save()
+			
+			product_item = Product.objects.get(pk=item.product.pk)
+			product_item.stock = product_item.stock - item.product_amount
+			product_item.save()
 		
 		customer_order = CustomerOrder.objects.create(order_number=order_number,
 														customer=customer,	

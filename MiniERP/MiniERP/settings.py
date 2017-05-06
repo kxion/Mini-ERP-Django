@@ -148,9 +148,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
 STATIC_URL = '/static/'
 
 # To serve static files on Heroku
@@ -178,7 +175,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
     'social.pipeline.user.create_user',
-    # 'minierp_app.social_auth_pipeline.save_avatar',  # <--- set the path to the function
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
